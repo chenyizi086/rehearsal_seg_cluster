@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		8DD76F650486A84900D96B5E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08FB7796FE84155DC02AAC07 /* main.cpp */; settings = {ATTRIBUTES = (); }; };
 		8DD76F6A0486A84900D96B5E /* rehearsal-seg-cluster.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = C6859E8B029090EE04C91782 /* rehearsal-seg-cluster.1 */; };
+		9F34D93C1475CA810090E92F /* audioreader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F34D93B1475CA810090E92F /* audioreader.cpp */; };
+		9F34D9451475CB190090E92F /* audiofilereader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F34D9441475CB190090E92F /* audiofilereader.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -27,6 +29,10 @@
 /* Begin PBXFileReference section */
 		08FB7796FE84155DC02AAC07 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		8DD76F6C0486A84900D96B5E /* rehearsal-seg-cluster */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "rehearsal-seg-cluster"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9F34D93B1475CA810090E92F /* audioreader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = audioreader.cpp; sourceTree = "<group>"; };
+		9F34D9441475CB190090E92F /* audiofilereader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = audiofilereader.cpp; sourceTree = "<group>"; };
+		9F34D94E1475CBB50090E92F /* audioreader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = audioreader.h; sourceTree = "<group>"; };
+		9F34D94F1475CBCC0090E92F /* audiofilereader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = audiofilereader.h; sourceTree = "<group>"; };
 		C6859E8B029090EE04C91782 /* rehearsal-seg-cluster.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = "rehearsal-seg-cluster.1"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -54,7 +60,13 @@
 		08FB7795FE84155DC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				9F34D92A1475C94F0090E92F /* clustering */,
+				9F34D9291475C93F0090E92F /* segmentation */,
 				08FB7796FE84155DC02AAC07 /* main.cpp */,
+				9F34D93B1475CA810090E92F /* audioreader.cpp */,
+				9F34D9441475CB190090E92F /* audiofilereader.cpp */,
+				9F34D94E1475CBB50090E92F /* audioreader.h */,
+				9F34D94F1475CBCC0090E92F /* audiofilereader.h */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -65,6 +77,20 @@
 				8DD76F6C0486A84900D96B5E /* rehearsal-seg-cluster */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		9F34D9291475C93F0090E92F /* segmentation */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = segmentation;
+			sourceTree = "<group>";
+		};
+		9F34D92A1475C94F0090E92F /* clustering */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = clustering;
 			sourceTree = "<group>";
 		};
 		C6859E8C029090F304C91782 /* Documentation */ = {
@@ -126,6 +152,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				8DD76F650486A84900D96B5E /* main.cpp in Sources */,
+				9F34D93C1475CA810090E92F /* audioreader.cpp in Sources */,
+				9F34D9451475CB190090E92F /* audiofilereader.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

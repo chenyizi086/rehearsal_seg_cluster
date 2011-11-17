@@ -4,19 +4,35 @@
 		activeBuildConfigurationName = Debug;
 		activeExecutable = 9F34D9171475C8090090E92F /* rehearsal-seg-cluster */;
 		activeTarget = 8DD76F620486A84900D96B5E /* rehearsal-seg-cluster */;
+		addToTargets = (
+		);
 		codeSenseManager = 9F34D9211475C80B0090E92F /* Code sense */;
 		executables = (
 			9F34D9171475C8090090E92F /* rehearsal-seg-cluster */,
 		);
 		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXExecutablesDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXExecutablesDataSource_NameID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					22,
+					300,
+					721,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXExecutablesDataSource_ActiveFlagID,
+					PBXExecutablesDataSource_NameID,
+					PBXExecutablesDataSource_CommentsID,
+				);
+			};
 			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
 				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
 				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
 				PBXFileTableDataSourceColumnWidthsKey = (
 					20,
-					341,
+					833,
 					20,
-					48.16259765625,
+					48,
 					43,
 					43,
 					20,
@@ -31,11 +47,22 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 343263241;
-			PBXWorkspaceStateSaveDate = 343263241;
+			PBXPerProjectTemplateStateSaveDate = 343263514;
+			PBXWorkspaceStateSaveDate = 343263514;
+		};
+		perUserProjectItems = {
+			9F34D92B1475C9580090E92F /* PBXBookmark */ = 9F34D92B1475C9580090E92F /* PBXBookmark */;
+			9F34D92C1475C9580090E92F /* PBXTextBookmark */ = 9F34D92C1475C9580090E92F /* PBXTextBookmark */;
 		};
 		sourceControlManager = 9F34D9201475C80B0090E92F /* Source Control */;
 		userBuildSettings = {
+		};
+	};
+	08FB7796FE84155DC02AAC07 /* main.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1011, 396}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 143}";
 		};
 	};
 	8DD76F620486A84900D96B5E /* rehearsal-seg-cluster */ = {
@@ -84,5 +111,42 @@
 	9F34D9211475C80B0090E92F /* Code sense */ = {
 		isa = PBXCodeSenseManager;
 		indexTemplatePath = "";
+	};
+	9F34D92B1475C9580090E92F /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 08FB7796FE84155DC02AAC07 /* main.cpp */;
+	};
+	9F34D92C1475C9580090E92F /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 08FB7796FE84155DC02AAC07 /* main.cpp */;
+		name = "main.cpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 143;
+		vrLoc = 0;
+	};
+	9F34D93B1475CA810090E92F /* audioreader.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1011, 1313}}";
+			sepNavSelRange = "{182, 0}";
+			sepNavVisRange = "{2480, 1036}";
+			sepNavWindowFrame = "{{15, 215}, {750, 558}}";
+		};
+	};
+	9F34D9441475CB190090E92F /* audiofilereader.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1011, 1170}}";
+			sepNavSelRange = "{2540, 0}";
+			sepNavVisRange = "{0, 544}";
+			sepNavWindowFrame = "{{38, 194}, {750, 558}}";
+		};
+	};
+	9F34D94E1475CBB50090E92F /* audioreader.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1011, 396}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 166}";
+		};
 	};
 }
