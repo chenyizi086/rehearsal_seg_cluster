@@ -11,7 +11,6 @@
 #include "sautils.h"
 #include "string.h"
 #include <fstream>
-#include "allegro.h"
 #include "audioreader.h"
 #include "scorealign.h"
 
@@ -52,7 +51,6 @@ long Audio_reader::read_window(float *data)
 	
     frames_read = read(temp_data + samples_per_frame - hop, hop);
     // zero any leftovers (happens at last frame):
-    //printf("check fr %i  hs %i ws %i ",frames_read,hop_size,window_size); 
     memset(temp_data + samples_per_frame - hop + frames_read, 0, 
            sizeof(float) * (hop - frames_read));
     assert(samples_per_frame - frames_read >= 0);
@@ -71,24 +69,22 @@ long Audio_reader::read_window(float *data)
 }
 
 
-void Audio_reader::calculate_parameters(Scorealign &sa, bool verbose)
+void Audio_reader::calculate_parameters(Feature_extractor &fe, bool verbose)
 {
     double sample_rate = get_sample_rate();
     long pcm_frames = get_frames();
     // we want to make sure samples_per_frame is even, to keep things 
     // consistent we'll change hopsize_samples the same way
-    samples_per_frame = (int) (sa.window_size * sample_rate + 0.5);
+    samples_per_frame = (int) (fe.window_size * sample_rate + 0.5);
     if (samples_per_frame % 2 == 1) 
-        samples_per_frame = samples_per_frame + 1;
+        samples_per_frame += 1;
 	
-	/*=============================================================*/
-	
-    hop_samples = (int)(sa.frame_period * sample_rate + 0.5);
+    hop_samples = (int)(fe.frame_period * sample_rate + 0.5);
     if (hop_samples % 2 == 1) 
         hop_samples = hop_samples + 1;
     actual_frame_period = (hop_samples / sample_rate);
 	
-    // this is stored back in a field in sa as well as here in the reader
+    // this is stored back in a field in fe as well as here in the reader
     frame_count= (int) ceil(((float) pcm_frames / hop_samples + 1)); 	
     this->frame_count = frame_count;
     temp_data = ALLOC(float, samples_per_frame);
