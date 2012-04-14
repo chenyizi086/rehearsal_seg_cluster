@@ -1,22 +1,12 @@
-/*
- *  music_noise_classifier.cpp
- *  rehearsal-seg-cluster
- *
- *  Created by Dawen Liang on 1/26/12.
- *  Copyright 2012 Carnegie Mellon University. All rights reserved.
- *
- */
-
-#include "music_noise_classifier.h"
 #include "adaboost.h"
-#include "hmm_smoother.h"
-#include "audioreader.h"
 #include "audiofilereader.h"
-
-#define DEBUG
+#include <assert>
+#include "hmm_smoother.h"
+#include "music_noise_classifier.h"
 
 Feature_extractor fe;
 Adaboost ada;
+HMM_Smoother hmms;
 
 void Music_Noise_Classifier::load_adaboost_paras(const char* f_ada, const char* f_em) {
 	ada.load_classifier(f_ada);
@@ -25,24 +15,24 @@ void Music_Noise_Classifier::load_adaboost_paras(const char* f_ada, const char* 
 
 
 void Music_Noise_Classifier::do_music_noise_classify(const char *filename, vector<Audio_clip> &clips) {
-	vector<int> pred_result, result_no_smooth, result_with_smooth;
+	vector<int> pred_result, ada_raw_result, result_no_smooth, result_with_smooth;
 	vector<float> data_db;
 
-	do_adaboost(filename, pred_result, data_db);
-	do_classify_no_smooth(pred_result, data_db, result_no_smooth);
-	do_hmm(result_no_smooth, result_with_smooth);
+	do_adaboost(filename, pred_result, ada_raw_result, data_db);
+
+	hmms.do_smooth(ada_raw_result, result_with_smooth);
 
 	do_gen_clips(result_with_smooth, clips);
 }
 
-vector<int> Music_Noise_Classifier::do_adaboost(const char *filename, vector<int> &pred_result, vector<float> &data_db) {
+vector<int> Music_Noise_Classifier::do_adaboost(const char *filename, vector<int> &pred_result, vector<float> &ada_raw_result, vector<float> &data_db) {
 	int i, count = 0;
-	Audio_reader reader;
-	vector<float> aver_spec, spectrum;
-	float db;
+	Audio_file_reader reader;
+	vector<float> aver_spec, aver_spec_normlized, spectrum;
+	float db, ada_raw;
 	//no overlapping
 	fe.set_parameters(SAMPLES_PER_FRAME / RESAMPLE_FREQ, SAMPLES_PER_FRAME / RESAMPLE_FREQ);
-	reader.open(filename, fe, DEBUG);
+	reader.open(filename, fe, DEBUG_FLAG);
 	reader.resample(RESAMPLE_FREQ);
 	
 	while (1) {
@@ -50,14 +40,15 @@ vector<int> Music_Noise_Classifier::do_adaboost(const char *filename, vector<int
 
 			// take the average of NUM_AVER windows
 			for (i = 0; i < aver_spec.size(); i++) {
-				aver_spec.at(i) /= NUM_AVER;
+				aver_spec[i] /= NUM_AVER;
 			}
-			pred_result.push_back(ada.do_prediction(aver_spec));			
+			fe.spec_normalize(aver_spec);
+			ada_raw_result.push_back(ada_raw);
 			// reassign the average to 0
 			aver_spec.assign(SAMPLES_PER_FRAME / 2 + 1, 0);
 		}
 
-		if (fe.get_spectrum(reader, spectrum, &db, DEBUG)) {
+		if (fe.get_spectrum(reader, spectrum, &db, DEBUG_FLAG)) {
 			data_db.push_back(db);
 #ifdef DEBUG
 			assert(aver_spec.size() == spectrum.size());
@@ -65,31 +56,46 @@ vector<int> Music_Noise_Classifier::do_adaboost(const char *filename, vector<int
 #endif
 			// taek the average of NUM_AVER windows
 			for (i = 0; i < aver_spec.size(); i++) {
-				aver_spec.at[i] += spectrum.at[i]; 
+				aver_spec[i] += spectrum[i]; 
 			}
 			count++;
 		} else {
 			// handle the last frame, if any
 			if (count % NUM_AVER != 0) {
 				for (i = 0; i < aver_spec.size(); i++) {
-					aver_spec.at(i) /= count % NUM_AVER;
+					aver_spec[i] /= count % NUM_AVER;
 				}
-				pred_result.push_back(ada.do_prediction(aver_spec));
+				fe.spec_normalize(aver_spec);	
+				pred_result.push_back(ada.do_prediction(aver_spec, &ada_raw));
+				ada_raw_result.push_back(ada_raw);
 			}
 			break;
 		}
 	}
 }
 
-void Music_Noise_Classifier::do_classify_no_smooth(vector<int> pred_result, vector<float> data_db, vector<int> &result_no_smooth) {
-	vector<float> data_db_normalize;
-	
-	// normalize the db
-	fe.db_normalize(data_db, data_db_normalize);
-
-
-
+void Music_Noise_Classifier::do_gen_clips(const char* filename, vector<int> result_with_smooth, vector<Audio_clip> &clips) {
+	bool new_clip_flag = true;
+	int cur;
+	for (int i = 0; i < result_with_smooth.size(); ) {
+		if (new_clip_flag) {
+			Audio_clip clip(filename);
+			clip.set_start(i);
+			clip.is_music = (result_with_smooth[i] == 1);
+			cur = result_with_smooth[i];
+			i++;
+			new_clip_flag = false;
+			continue;
+		}
+		if (result_with_smooth[i] != cur) {
+			clip.set_end(i-1);
+			if (clip.is_music && clip.get_end() - clip.get_start() >= int(MIN_LENGTH_SECS / (NUM_AVER * SAMPLES_PER_FRAME / RESAMPLE_FREQ) + 0.5)) {
+				clips.push_back(clip);
+			}
+			new_clip_flag = true;
+			continue;
+		} 
+		i++;
+	}
 }
-	
-void Music_Noise_Classifier::do_hmm(vector<float> result_no_smooth, vector<float> &result_with_smooth) {
-}
+

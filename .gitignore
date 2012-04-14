@@ -1,4 +1,6 @@
 *.swp
 test.cpp
 test.c
-
+*.svn*
+*build*
+*.o*

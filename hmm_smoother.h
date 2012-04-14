@@ -1,15 +1,12 @@
-/*
- *  hmm_smoother.h
- *  rehearsal-seg-cluster
- *
- *  Created by Dawen Liang on 1/26/12.
- *  Copyright 2012 Carnegie Mellon University. All rights reserved.
- *
- */
+#ifndef HMM_SMOOTHER_H
+#define HMM_SMOOTHER_H
 
 class HMM_Smoother {
 public:
     HMM_Smoother();
-    
+    void do_smooth(vector<float> ada_raw_result, vector<int> &result_with_smooth);
+private:
+	int ind2label(int ind);
 };
 
+#endif

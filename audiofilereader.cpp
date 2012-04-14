@@ -8,7 +8,6 @@
 #include "stdio.h"
 #include "math.h"
 #include "string.h"
-#include "sndfile.h"
 #include "samplerate.h"
 #include "audioreader.h"
 #include "audiofilereader.h"
@@ -20,6 +19,8 @@
 #endif
 
 #define DEBUG
+#define DEFAULT_CONVERTER SRC_SINC_MEDIUM_QUALITY
+#define BUFFER_LEN 4096   
 
 double Audio_file_reader::get_sample_rate()
 {
@@ -89,9 +90,12 @@ bool Audio_file_reader::open(const char *filename, Feature_extractor &fe, bool v
 }
 
 void Audio_file_reader::resample(int new_sample_rate) {
+	sf_count_t sample_rate_convert (SNDFILE *, SNDFILE *, int, double, int, double *);
+
 	sf_count_t	count;	
-	double gain = 1.0;
+	double gain = 1.0, src_ratio = -1.0;
 	int samplerate = sf_info.samplerate;
+	int rsamplerate = sf_info_rs.samplerate;
 
     bzero(&sf_info_rs, sizeof(sf_info_rs));
 	
@@ -103,7 +107,7 @@ void Audio_file_reader::resample(int new_sample_rate) {
 	int converter = DEFAULT_CONVERTER ;
 
 #ifdef DEBUG
-	printf ("Input File    : %s\n", sf_info.name) ;
+	printf ("Input File    : %s\n", name) ;
 	printf ("Sample Rate   : %d\n", sf_info.samplerate) ;
 	printf ("Input Frames  : %ld\n\n", (long) sf_info.frames) ;
 #endif
@@ -114,9 +118,8 @@ void Audio_file_reader::resample(int new_sample_rate) {
 	if (fabs (src_ratio - 1.0) < 1e-20)
 	{	
 		printf ("Target samplerate and input samplerate are the same. Exiting.\n") ;
-		return
-	};
-
+		return;
+	}
 
 #ifdef DEBUG
 	printf ("SRC Ratio     : %f\n", src_ratio) ;
@@ -125,12 +128,12 @@ void Audio_file_reader::resample(int new_sample_rate) {
 
 	if (src_is_valid_ratio (src_ratio) == 0)
 	{	
-		printf ("Error : Sample rate change out of valid range.\n") ;
-		return
-	};
+		printf ("Error : Sample rate change out of valid range.\n");
+		return;
+	}
 
 #ifdef DEBUG
-	printf ("Output file   : %s\n", sf_info.name);
+	printf ("Output file   : %s\n", name);
 	printf ("Sample Rate   : %d\n", sf_info_rs.samplerate) ;
 #endif
 
@@ -154,15 +157,15 @@ void Audio_file_reader::resample(int new_sample_rate) {
 #ifdef DEBUG
 	printf ("Output Frames : %ld\n\n", (long) count) ;
 #endif
-
-	return
+	return;
 } /* main */
 
 /*==============================================================================
 */
 
-sf_count_t sample_rate_convert (SNDFILE *infile, SNDFILE *outfile, int converter, double src_ratio, int channels, double * gain)
-{	static float input [BUFFER_LEN] ;
+sf_count_t sample_rate_convert (SNDFILE *infile, SNDFILE *outfile, int converter, double src_ratio, int channels, double * gain) {	
+	double apply_gain (float *, long , int , double , double); 
+	static float input [BUFFER_LEN] ;
 	static float output [BUFFER_LEN] ;
 
 	SRC_STATE	*src_state ;

@@ -1,4 +1,7 @@
-class Adaboost;
+#ifndef AUDIO_READER_H
+#define AUDIO_READER_H
+
+class Feature_extractor;
 
 class Audio_reader {
 public:
@@ -12,7 +15,7 @@ public:
     virtual double get_sample_rate() = 0;
     virtual long get_frames() = 0; // returns frames of input audio 
     // i.e. (samples/channels)
-    void calculate_parameters(Adaboost &ada, bool verbose);
+    void calculate_parameters(Feature_extractor &fe, bool verbose);
     Audio_reader() {
         reading_first_window = true;
         reading_last_window = false;
@@ -27,3 +30,4 @@ protected:
     float *temp_data;
 };
 
+#endif

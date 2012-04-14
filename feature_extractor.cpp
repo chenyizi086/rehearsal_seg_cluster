@@ -81,11 +81,15 @@ int Feature_extractor::get_spectrum(Audio_reader &reader, vector<float> &data_sp
 
 		float sq_sum = 0.0;
 		for (i = 0; i < frame_size; i++) {
-			data_spec.push_back(frame_data[i]);
 			sq_sum += frame_data[i] * frame_data[i];
 		}
 
 		*frame_db = 10 * log10(sq_sum / frame_size);
+
+		float norm = sqrt(sq_sum);
+		for (i = 0; i < frame_size; i++) {
+			data_spec.push_back(frame_data[i] / norm);
+		}
     } 
 
     free(fft_dataI);
@@ -96,18 +100,19 @@ int Feature_extractor::get_spectrum(Audio_reader &reader, vector<float> &data_sp
 	return has_next;
 }	
 
-void Feature_extractor::db_normalize(vector<float> data_in, vector<float> &data_out) {
-	vector<float> tmp = data_in;
+void Feature_extractor::db_normalize(vector<float> &data_db) {
+	vector<float> tmp = data_db;
 	float db_stand;
 	int i, size = tmp.size();
 
 	sort(tmp.begin(), tmp.end());
-	db_stand = tmp.at((int)(0.95 * size + 0.5));
+	db_stand = tmp[(int)(0.95 * size + 0.5)];
 #ifdef DEBUG
 	printf("The standard db is %f\n", db_stand);
 #endif
 	for (i = 0; i < size; i++) {
-		data_out.push_back(data_in.at(i) + (DB_CENTER - db_stand));
+		//data_out.push_back(data_in.at(i) + (DB_CENTER - db_stand));
+		data_db[i] += (DB_CENTER - db_stand);
 	}
 }
 

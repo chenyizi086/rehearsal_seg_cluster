@@ -1,7 +1,10 @@
+#ifndef AUDIO_FILE_READER_H
+#define AUDIO_FILE_READER_H
+
 #define MAX_NAME_LEN 255
 #include "sndfile.h"
 
-class Adaboost;
+class Feature_extractor;
 
 class Audio_file_reader : public Audio_reader {
 public:
@@ -14,13 +17,14 @@ public:
     int bytes_per_frame;
     long total_frames;
 	long total_frames_rs;
-    bool open(const char *filename, Adaboost &ada, bool verbose);
+    bool open(const char *filename, Feature_extractor &fe, bool verbose);
     void close();
     double get_sample_rate();
 	double get_sample_rate_rs();
 	long get_frames_rs();
     long get_frames();
     void print_info();
-	void resample(SNDFILE *sf, SNDFILE *sf_rs, int rsamplerate);
+	void resample(int rsamplerate);
 };
 
+#endif
