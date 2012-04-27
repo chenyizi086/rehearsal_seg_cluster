@@ -16,5 +16,6 @@ using namespace std;
 #define ROUND(x) ((int) (0.5 + (x)))
 
 double interpolate(double x1, double y1, double x2, double y2, double x);
+const char* const bool_to_string(bool b);
 vector<vector<float> > read_matfile(const char* filename);
 int nextPowerOf2(int n);

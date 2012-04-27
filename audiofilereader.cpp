@@ -71,7 +71,7 @@ long Audio_file_reader::read(float *data, long n)
 }
 
 
-bool Audio_file_reader::open(const char *filename, Feature_extractor &fe, bool verbose)
+bool Audio_file_reader::open(const char *filename, Feature_extractor &fe, int start_frame, bool verbose)
 {
     bytes_per_frame = 0; // initialize now in case an error occurs
     name[0] = 0;
@@ -82,11 +82,15 @@ bool Audio_file_reader::open(const char *filename, Feature_extractor &fe, bool v
     strncpy(name, filename, MAX_NAME_LEN);
     name[MAX_NAME_LEN] = 0; // just in case
     total_frames = (long) sf_seek(sf, 0, SEEK_END);
-    sf_seek(sf, 0, SEEK_SET);
+    sf_seek(sf, start_frame, SEEK_SET);
     // we're going to read floats, but they might be multi-channel...
     bytes_per_frame = sf_info.channels * sizeof(float);
     calculate_parameters(fe, verbose);
     return true;
+}
+
+bool Audio_file_reader::open(const char *filename, Feature_extractor &fe, bool verbose) {
+	return open(filename, fe, 0, verbose);
 }
 
 void Audio_file_reader::resample(int new_sample_rate) {

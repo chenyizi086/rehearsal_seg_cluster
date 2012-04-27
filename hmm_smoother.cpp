@@ -5,16 +5,25 @@
 
 #define MAX(x, y) x > y ? x:y
 
-void HMM_Smoother::do_smooth(vector<float> ada_raw_result, vector<int> &result_with_smooth) {
+void HMM_smoother::do_smooth(vector<float> ada_raw_result, vector<int> &result_with_smooth) {
 	vector<float> viterbi_m, viterbi_n;
-	vector<float> p_os_m;		// p(observation | state = music)
-	vector<float> p_os_n;		// p(observation | state = noise)
 	vector<int> path_m, path_n;
-
-	int i, ind, n_lframe = ada_raw_result.size();
+	int ind, n_lframe = ada_raw_result.size();
 	
-	viterbi_m.push_back(log(p_init_m) + log(p_os_m[0]));
-	viterbi_n.push_back(log(p_init_n) + log(p_os_n[0]));
+	// put the init values for viterbi
+	viterbi_m.push_back(log(p_init_m) + logistic(ada_raw_result[0], 1);
+	viterbi_n.push_back(log(p_init_n) + logistic(ada_raw_result[0], 0);
+
+	compute_viterbi(viterbi_m, viterbi_n, path_m, path_n, n_lframe);
+		
+	// decode from the last
+	ind = viterbi_m[n_lframe - 1] > viterbi_n[n_lframe - 1] ? 0:1; 
+	viterbi_decode(result_with_smooth, path_m, path_n, ind, n_lframe);
+}
+
+void HMM_Smoother::compute_viterbi(vector<float> &viterbi_m, vector<float> &viterbi_n, vector<int> &path_m, vector<int> &path_n, int n_lframe) {
+	float max_m, max_n;
+	int ind_m, ind_n;
 
 	for (i = 1 ; i < n_lframe; i++) {
 
@@ -25,16 +34,17 @@ void HMM_Smoother::do_smooth(vector<float> ada_raw_result, vector<int> &result_w
 		max_n = MAX(viterbi_n[i-1] + log(pn_m), viterbi_n + log(pn_n));
 		ind_n = viterbi_n[i-1] + log(pn_m) > viterbi_n + log(pn_n) ? 0:1;
 
-		viterbi_m = log(1.0 / (1 + exp(- ada_raw_result[i] * alpha)) / p_m) + max_m;
-		viterbi_n = log((1 - 1.0 / (1 + exp(- ada_raw_result[i] * alpha))) / p_n) + max_n;
+		viterbi_m = logistic(ada_raw_result[i], 1) + max_m;
+		viterbi_n = logistic(ada_raw_result[i], 0) + max_n;
 
 		path_m.push_back(ind_m);
 		path_n.push_back(ind_n);
 
 	}
-	
-	// trace back
-	ind = viterbi_m[n_lframe - 1] > viterbi_n[n_lframe - 1] ? 0:1; 
+}
+
+void HMM_Smoother::viterbi_decode(vector<int> &result_with_smooth, vector<int> path_m, vector<int> path_n, int ind, int n_lframe) {
+		// trace back
 	result_with_smooth.push_back(ind2label(ind));
 	for (i = n_lframe - 1; i >= 0; i--) {
 		if (ind == 0) {
@@ -48,13 +58,21 @@ void HMM_Smoother::do_smooth(vector<float> ada_raw_result, vector<int> &result_w
 	// add the first long_frame the same as the second  long_frame and 
 	// then reverse it to the actual order
 	result_with_smooth.push_back(ind2label(ind));
-	reverse(result_no_smooth.begin(), result_no_smooth.end());
+	reverse(result_with_smooth.begin(), result_with_smooth.end());
 }
 
 /*
  * given index of viterbi path (0 -> music, 1 -> music)
  * return label (1 -> music, -1 -> noise)
  */
-int HMM_Smoother::ind2label(int ind) {
+int HMM_smoother::ind2label(int ind) {
 	return -2 * ind + 1;
+}
+
+float logistic(float ada_raw, int is_music) {
+	if (is_music) {
+		return log(1.0 / (1 + exp(- ada_raw * alpha)) / p_m);
+	} else {
+		return log((1 - 1.0 / (1 + exp(- ada_raw * alpha))) / p_n);
+	}
 }

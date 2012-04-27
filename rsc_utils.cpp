@@ -17,6 +17,11 @@ double interpolate(double x1, double y1, double x2, double y2, double x)
     return y1 + (y2 - y1) * (x - x1) / (x2 - x1);
 }
 
+static inline const char* const bool_to_string(bool b)
+{
+  return b ? "true" : "false";
+}
+
 vector<vector<float> > read_matfile(const char* filename) {
     vector<vector<float> > table;    
     // Load table from file

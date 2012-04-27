@@ -5,9 +5,21 @@
 #include "fft3/FFT3.h"
 #include "math.h"
 #include "rsc_utils.h"
+#include "gen_chroma.h"
 
-#define DEBUG_LOG
-#define FIXED_PARAS
+
+Feature_extractor::Feature_extractor() {
+#ifdef DEBUG_LOG
+	dbf = fopen("feature_extractor_debug.txt", "w");
+	assert(dbf);
+#endif
+}
+
+Feature_extractor::~Feature_extractor() {
+#ifdef DEBUG_LOG
+	fclose(dbf);
+#endif
+}
 
 int Feature_extractor::get_spectrum(Audio_reader &reader, vector<float> &data_spec, float *frame_db, bool verbose) {
 	int i;
@@ -117,8 +129,79 @@ void Feature_extractor::db_normalize(vector<float> &data_db) {
 }
 
 
-int Feature_extractor::get_chroma_vector(Audio_reader &reader, vector<vector<float> > &data_spec) {
+int Feature_extractor::get_CENS(Audio_reader &reader, long nframes, vector<vector<float> > &data_cens) {
+	int actual_nframes, i, j, k, l;
+	float *chroma, *chroma_conv, *hanning, *chroma_bin;
+	double actual_frame_period; 
+	actual_nframes = gen_chroma(reader, HIGH_CUTOFF, LOW_CUTOFF, nframes, &chroma, &actual_frame_period);
+	assert(actual_nframes == nframes);
+
+	// generate the hanning window for long time statistics
+	hanning = ALLOC(float, LONG_WINDOW);
+	gen_Hanning(hanning, LONG_WINDOW);
+	float sum = 0.0;
+	// normalize the window
+	for (i = 0; i < LONG_WINDOW; i++) {
+		sum += hanning[i];
+	}
+	for (i = 0; i < LONG_WINDOW; i++) {
+		hanning[i] /= sum;
+	}
+
+	// calcualte the chroma stat help, which is a quantization statistics of chroma 
+	for (i = 0; i < nframes; i++) {
+		for (j = 0; j < CHROMA_BIN_COUNT; j++) {
+			for (k = 0; k < QUANT_SIZE; k++) {
+				if (AREF2(chroma, i, j) > VEC_ENERGY[k]) {
+					for (l = k; l < QUANT_SIZE; l++) {
+						AREF2(chroma, i, j) += VEC_WEIGHT[l];
+					}
+				} else if (k == QUANT_SIZE - 1) {
+					AREF2(chroma, i, j) = 0;
+				}
+			}
+		}
+	}
+
+	// claculate CENS, which is the convoltion of chroma stat help
+	// and hanning window, then downsampling by factor of HOP_SIZE_LONG
+	for (i = 0; i < nframes; i += HOP_SIZE_LONG) {
+		for (j = 0; j < CHROMA_BIN_COUNT; j++) {
+			float *chroma_bin = (AREF1(chroma, i) + j);
+			calculate_conv(chroma_bin, (int)LONG_WINDOW, hanning, (int)LONG_WINDOW, chroma_conv);
+			for (k = 0; k < 2 * LONG_WINDOW - 1; k += HOP_SIZE_LONG) {
+				int offset = (i / HOP_SIZE_LONG) *((2 * LONG_WINDOW - 1) / HOP_SIZE_LONG);
+				if (j == 0) {
+					vector<float> bin_cens;
+					bin_cens.push_back(chroma_conv[k]);
+					data_cens.push_back(bin_cens);
+				} else {
+					data_cens[(offset + k / HOP_SIZE_LONG)/HOP_SIZE_LONG].push_back(chroma_conv[k]);
+				}
+			}
+		}
+	}
 	return 0;
+}
+
+
+/*
+ *  Compute the convolution given the start position in one bin of chroma, and the window. Note the with row-wise chroma vector, the access for chroma of one pitch class is done within one column
+ 
+   Ccurrently a n^2 imlementation, nlog(n) can be achieved with FFT (not now, FFT now doesn't take non-powerof2 length array
+*/
+void Feature_extractor::calculate_conv(float *chroma_bin, const int len1, float *window, const int len2, float *out) {
+	int i, j, k, len_conv = len1 + len2 - 1;
+	float chroma_at; 
+	out = ALLOC(float, len_conv);
+	for (i = 0; i < len_conv; i++) {
+		for (j = 0, k = i; j < len1 && k >=0; j++, k--) {
+			if (k < len2) {
+				chroma_at = *(chroma + j * (CHROMA_BIN_COUNT + 1));
+				out[i] += window[k] * chroma_at;
+			}
+		}
+	}
 }
 
 /*				GEN_MAGNITUDE
@@ -148,4 +231,13 @@ void Feature_extractor::gen_Hamming(float* h, int n)
       float cos_value = (float) cos(2.0 * M_PI * k * (1.0 / n));
         h[k] = 0.54F + (-0.46F * cos_value);
     }
+}
+
+void Feature_extractor::gen_Hanning(float *h, int n)
+{
+	int k;
+	for (k = 0; k < n; k++) {
+		float cos_value = (float) cos(2.0 * M_PI * k * (1.0 / (n - 1)));
+		h[k] = 0.5 * (1 - cos_value);
+	}
 }

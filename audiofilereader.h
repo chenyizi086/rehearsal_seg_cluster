@@ -18,6 +18,7 @@ public:
     long total_frames;
 	long total_frames_rs;
     bool open(const char *filename, Feature_extractor &fe, bool verbose);
+	bool open(const char *filename, Feature_extractor &fe, int start_frame, bool verbose);
     void close();
     double get_sample_rate();
 	double get_sample_rate_rs();

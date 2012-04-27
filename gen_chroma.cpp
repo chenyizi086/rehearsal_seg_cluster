@@ -9,11 +9,13 @@
 #include "math.h"
 #include <fstream>
 #include "fft3/FFT3.h"
+#include "feature_extractor.h"
 #include "audioreader.h"
-#include "scorealign.h"
 #include "gen_chroma.h"
-#include "sautils.h"
-#ifdef SA_VERBOSE
+#include "constant.h"
+#include "rsc_utils.h"
+
+#ifdef DEBUG_FLAG
 #include <iostream> // cout
 #endif
 using namespace std;
@@ -24,6 +26,8 @@ using namespace std;
 #define p1 0.0577622650466621
 #define p2 2.1011784386926213
 
+float silence_threshold = DEFAULT_SILENCT_THRESHOLD;
+
 // each row is one chroma vector, 
 // data is stored as an array of chroma vectors:
 // vector 1, vector 2, ...
@@ -31,26 +35,6 @@ using namespace std;
 float hz_to_step(float hz)
 {
     return float((log(hz) - p2) / p1);
-}
-
-/*				GEN_MAGNITUDE
-   given the real and imaginary portions of a complex FFT function, compute 
-   the magnitude of the fft bin.
-   
-   NOTE: out should be length n
-*/
-void gen_Magnitude(float* inR, float* inI, int low, int hi, float* out)
-{
-    int i;
-    
-    for (i = low; i < hi; i++) {
-      float magVal = sqrt(inR[i] * inR[i] + inI[i] * inI[i]);
-      //printf("   %d: sqrt(%g^2+%g^2)=%g\n",i,inR[i],inI[i+1],magVal);
-      out[i]= magVal;
-#ifdef SA_VERBOSE
-      if (i == 1000) fprintf(dbf, "gen_Magnitude: %d %g\n", i, magVal);
-#endif
-    }
 }
 
 
@@ -105,20 +89,6 @@ int min_Bin_Num(float* bins, int numBins){
 }
 
 
-/*				GEN_HAMMING
-    given data from reading in a section of a sound file
-    applies the hamming function to each sample.
-    n specifies the length of in and out.
-*/
-void gen_Hamming(float* h, int n)
-{
-    int k;
-    for (k = 0; k < n; k++) {
-      float cos_value = (float) cos(2.0 * M_PI * k * (1.0 / n));
-        h[k] = 0.54F + (-0.46F * cos_value);
-    }
-}
-
 /*				NEXTPOWEROF2
     given an int n, finds the next power of 2 larger than
     or equal to n.
@@ -128,6 +98,20 @@ int nextPowerOf2(int n)
     int result = 1;
     while (result < n) result = (result << 1);
     return result;
+}
+
+void gen_Magnitude_range(float* inR, float* inI, int low, int hi, float* out)
+{
+    int i;
+    
+    for (i = low; i < hi; i++) {
+      float magVal = sqrt(inR[i] * inR[i] + inI[i] * inI[i]);
+      //printf("   %d: sqrt(%g^2+%g^2)=%g\n",i,inR[i],inI[i+1],magVal);
+      out[i]= magVal;
+#ifdef SA_VERBOSE
+      if (i == 1000) fprintf(dbf, "gen_Magnitude: %d %g\n", i, magVal);
+#endif
+    }
 }
 
 
@@ -143,21 +127,25 @@ static void normalize(float *cv)
     }
     avg /= CHROMA_BIN_COUNT;
 
-    /* Normalize this frame to avg. 0 */
-    for (int i = 0; i < CHROMA_BIN_COUNT; i++)
-        cv[i] -= avg;
+	/*
+	No need to do these as in Muller's paper and the code they released
+	*/
 
-    /* Calculate std. dev. for this frame */
-    float sum = 0;
-    for (int i = 0; i < CHROMA_BIN_COUNT; i++) {
-        float x = cv[i];
-        sum += x * x;
-    }
-    float dev = sqrt(sum / CHROMA_BIN_COUNT);
-    if (dev == 0.0) dev = 1.0F; /* don't divide by zero */
+    ///* Normalize this frame to avg. 0 */
+    //for (int i = 0; i < CHROMA_BIN_COUNT; i++)
+    //    cv[i] -= avg;
 
-    /* Normalize this frame to std. dev. 1*/
-    for (int i = 0; i < CHROMA_BIN_COUNT; i++) cv[i] /= dev;
+    ///* Calculate std. dev. for this frame */
+    //float sum = 0;
+    //for (int i = 0; i < CHROMA_BIN_COUNT; i++) {
+    //    float x = cv[i];
+    //    sum += x * x;
+    //}
+    //float dev = sqrt(sum / CHROMA_BIN_COUNT);
+    //if (dev == 0.0) dev = 1.0F; /* don't divide by zero */
+
+    ///* Normalize this frame to std. dev. 1*/
+    //for (int i = 0; i < CHROMA_BIN_COUNT; i++) cv[i] /= dev;
 }
 
 
@@ -171,20 +159,19 @@ static void normalize(float *cv)
     The function returns the number of frames 
     (aka the length of the 1st dimention of chrom_energy)
 */
-int Scorealign::gen_chroma_audio(Audio_reader &reader, int hcutoff, 
-        int lcutoff, float **chrom_energy, double *actual_frame_period, 
-        int id)
+int Feature_extractor::gen_chroma(Audio_reader &reader, int hcutoff, 
+        int lcutoff, long nframes, float **chrom_energy, double *actual_frame_period)
 {
     int i;
     double sample_rate = reader.get_sample_rate();
     float reg11[CHROMA_BIN_COUNT]; // temp storage1;
     float reg12[CHROMA_BIN_COUNT]; // temp storage2;
 
-    if (verbose) {
-        printf ("==============FILE %d====================\n", id);
+    if (DEBUG_FLAG) {
+        printf ("==============FILE====================\n");
         reader.print_info();
     }
-#if DEBUG_LOG
+#ifdef DEBUG_LOG
     fprintf(dbf, "******** BEGIN AUDIO CHROMA COMPUTATION *********\n");
 #endif
     // this seems like a poor way to set actual_frame_period_0 or _1 in 
@@ -202,9 +189,10 @@ int Scorealign::gen_chroma_audio(Audio_reader &reader, int hcutoff,
 
     // allocate some buffers for use in the loop
     int full_data_size = nextPowerOf2(reader.samples_per_frame);
-    if (verbose) {
+    if (DEBUG_FLAG) {
         printf("   samples per frame is %ld \n", reader.samples_per_frame);
         printf("   total chroma frames %ld\n", reader.frame_count); 
+		printf("   the number of chroma frames to compute %ld\n", nframes);
         // printf("   Window size  %g second \n", reader.window_size);
         printf("   hopsize in samples %ld \n", reader.hop_samples);
         printf("   fft size %d\n", full_data_size);
@@ -225,7 +213,7 @@ int Scorealign::gen_chroma_audio(Audio_reader &reader, int hcutoff,
     int *bin_map = ALLOC(int, full_data_size);
 	
     //set up the chrom_energy array;
-    *chrom_energy = ALLOC(float, reader.frame_count * (CHROMA_BIN_COUNT + 1));
+    *chrom_energy = ALLOC(float, nframes * (CHROMA_BIN_COUNT + 1));
     int cv_index = 0;
 
     // set up mapping from spectral bins to chroma bins
@@ -264,7 +252,8 @@ int Scorealign::gen_chroma_audio(Audio_reader &reader, int hcutoff,
     float *hamming = ALLOC(float, reader.samples_per_frame);
     gen_Hamming(hamming, reader.samples_per_frame);
 
-    while (reader.read_window(full_data)) {
+    for (int count = 0; count < nframes; count++) {
+		assert(reader.read_window(full_data) != 0);
         //fill out array with 0's till next power of 2
 #ifdef SA_VERBOSE
         fprintf(dbf, "samples_per_frame %d sample %g\n", 
@@ -293,7 +282,7 @@ int Scorealign::gen_chroma_audio(Audio_reader &reader, int hcutoff,
         FFT3(full_data_size, 0, full_data, NULL, fft_dataR, fft_dataI); //fft3
       
         //given the fft, compute the energy of each point
-        gen_Magnitude(fft_dataR, fft_dataI, low_bin, high_bin, full_data);
+        gen_Magnitude_range(fft_dataR, fft_dataI, low_bin, high_bin, full_data);
       
         /*-------------------------------------
           GENERATE BINS AND PUT
@@ -316,48 +305,10 @@ int Scorealign::gen_chroma_audio(Audio_reader &reader, int hcutoff,
             binCount[mod_bin]++;
         }
 
-        /*-------------------------------------
-          END OF BIN GENERATION
-          -------------------------------------*/
-        /* THE FOLLOWING LOOKS LIKE SOME OLD CODE TO COMPUTE
-         * CHROMA FLUX, BUT IT IS NOT IN USE NOW 
-         
-        if (PRINT_BIN_ENERGY) {
-            float mao1;
-            float sum=0.;
-         
-            for (i = 0; i < CHROMA_BIN_COUNT; i++) {
-                reg12[i]=binEnergy[i] / binCount[i];
-            }
-       
-            if (reg11[0]==-999){
-                printf("Chroma Flux \n\n");
-            } else {
-                for (i = 0; i < CHROMA_BIN_COUNT; i++) {
-                }
-                for (int k = 0; k < CHROMA_BIN_COUNT; k++) {
-                    float x = reg11[k];
-                    float y = reg12[k];
-                    float diff = x - y;
-                    sum += diff * diff;
-                }
-                mao1 = sqrt(sum);         
-                sequence++;      
-                sum = 0.;
-                mao1 = 0.;
-            }
-            for (i = 0; i < CHROMA_BIN_COUNT; i++) {
-                reg11[i]=reg12[i];
-            }
-            //fclose(Pointer);
-          }
-        */
-        //put chrom energy into the returned array
-
-#ifdef SA_VERBOSE
+       #ifdef SA_VERBOSE
         fprintf(dbf, "cv_index %d\n", cv_index);
 #endif
-        assert(cv_index < reader.frame_count);
+        assert(cv_index < nframes);
         float *cv = AREF1(*chrom_energy, cv_index);
         for (i = 0;  i < CHROMA_BIN_COUNT; i++) {
             cv[i] = binEnergy[i] / binCount[i];
@@ -367,10 +318,10 @@ int Scorealign::gen_chroma_audio(Audio_reader &reader, int hcutoff,
             cv[CHROMA_BIN_COUNT] = 1.0f;
         } else {
             cv[CHROMA_BIN_COUNT] = 0.0f;
-            // normalize the non-silent frames
-            normalize(cv);
         }
-#if DEBUG_LOG
+		// no matter what, normalize the non-silenced
+        normalize(cv);
+#ifdef DEBUG_LOG
         fprintf(dbf, "%d@%g) ", cv_index, cv_index * reader.actual_frame_period);
         for (int i = 0; i < CHROMA_BIN_COUNT; i++) {
           fprintf(dbf, "%d:%g ", i, cv[i]);
@@ -378,18 +329,13 @@ int Scorealign::gen_chroma_audio(Audio_reader &reader, int hcutoff,
         fprintf(dbf, " sil?:%g\n\n", cv[CHROMA_BIN_COUNT]);
 #endif
         cv_index++;
-        if (progress && cv_index % 10 == 0 && 
-            !progress->set_feature_progress(
-                    float(cv_index * reader.actual_frame_period))) {
-            break;
-        }
     } // end of while ((readcount = read_mono_floats...
 
     free(hamming);
     free(fft_dataI);
     free(fft_dataR);
     free(full_data);
-    if (verbose)
-        printf("\nGenerated Chroma. file%d_frames is %i\n", id, file0_frames);
+    if (DEBUG_FLAG)
+        printf("\nGenerated Chroma.\n");
     return cv_index;
 }

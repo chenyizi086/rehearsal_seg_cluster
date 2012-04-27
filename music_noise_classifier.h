@@ -13,9 +13,9 @@ using namespace std;
 
 class Audio_clip;
 
-class Music_Noise_Classifier {
+class Music_noise_classifier {
 public:
-    Music_Noise_Classifier(){};
+    Music_noise_classifier(){};
 	void do_music_noise_classify(const char* filename, vector<Audio_clip> &clips);
 private:
 	void do_adaboost(const char* filename, vector<int> &pred_result, vector<float> &ada_raw_result vector<float> &data_db);	
