@@ -20,7 +20,8 @@
 
 #define DEBUG
 #define DEFAULT_CONVERTER SRC_SINC_MEDIUM_QUALITY
-#define BUFFER_LEN 4096   
+#define BUFFER_LEN 4096 
+
 
 double Audio_file_reader::get_sample_rate()
 {

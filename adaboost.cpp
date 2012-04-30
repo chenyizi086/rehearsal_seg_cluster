@@ -1,11 +1,6 @@
 #include "adaboost.h"
+#include "constant.h"
 #include "rsc_utils.h"
-
-Adaboost::Adaboost() {
-}
-
-Adaboost::~Adaboost() {
-}
 
 void Adaboost::load_classifier(const char *f_ada) {
     parameters = read_matfile(f_ada); 

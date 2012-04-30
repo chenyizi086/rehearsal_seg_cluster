@@ -3,11 +3,14 @@
 
 #define MAX_NAME_LEN 255
 #include "sndfile.h"
+#include "audioreader.h"
 
 class Feature_extractor;
 
-class Audio_file_reader : public Audio_reader {
+class Audio_file_reader: public Audio_reader {
 public:
+    Audio_file_reader(){};
+    ~Audio_file_reader(){free(temp_data);};
     virtual long read(float *data, long n);
     SNDFILE *sf;
 	SNDFILE *sf_rs;

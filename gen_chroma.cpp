@@ -11,7 +11,6 @@
 #include "fft3/FFT3.h"
 #include "feature_extractor.h"
 #include "audioreader.h"
-#include "gen_chroma.h"
 #include "constant.h"
 #include "rsc_utils.h"
 

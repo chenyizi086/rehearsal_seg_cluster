@@ -1,11 +1,6 @@
-/*
- *  sautils.h
- *  scorealign
- *
- *  Created by Roger Dannenberg on 10/20/07.
- *  Copyright 2007 by Roger B. Dannenberg. All rights reserved.
- *
- */
+#ifndef RSC_UTILS_H
+#define RSC_UTILS_H
+
 #include <vector>
 
 using namespace std;
@@ -19,3 +14,7 @@ double interpolate(double x1, double y1, double x2, double y2, double x);
 const char* const bool_to_string(bool b);
 vector<vector<float> > read_matfile(const char* filename);
 int nextPowerOf2(int n);
+string int2str(int a);
+float vector_min(vector<float> min_dist, int *index);
+
+#endif

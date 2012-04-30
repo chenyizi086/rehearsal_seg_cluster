@@ -8,13 +8,23 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
-#include "sautils.h"
+#include "rsc_utils.h"
 #include "string.h"
 #include <fstream>
 #include "audioreader.h"
-#include "scorealign.h"
+#include "feature_extractor.h"
 
 using namespace std;
+
+Audio_reader::Audio_reader() {
+    reading_first_window = true;
+    reading_last_window = false;
+    temp_data = NULL;
+}
+
+Audio_reader::~Audio_reader() {
+    if (temp_data) free(temp_data);
+}    
 
 long Audio_reader::read_window(float *data)
 // reads the next window of samples
@@ -75,11 +85,11 @@ void Audio_reader::calculate_parameters(Feature_extractor &fe, bool verbose)
     long pcm_frames = get_frames();
     // we want to make sure samples_per_frame is even, to keep things 
     // consistent we'll change hopsize_samples the same way
-    samples_per_frame = (int) (fe.window_size * sample_rate + 0.5);
+    samples_per_frame = (int) (fe.get_window_size() * sample_rate + 0.5);
     if (samples_per_frame % 2 == 1) 
         samples_per_frame += 1;
 	
-    hop_samples = (int)(fe.frame_period * sample_rate + 0.5);
+    hop_samples = (int)(fe.get_frame_period() * sample_rate + 0.5);
     if (hop_samples % 2 == 1) 
         hop_samples = hop_samples + 1;
     actual_frame_period = (hop_samples / sample_rate);

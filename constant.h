@@ -5,7 +5,6 @@
 #define DEBUG
 #define DEBUG_LOG
 #define FIXED_PARAS
-bool DEBUG_FLAG = true;
 
 /*
  * Constant numbers for adaboost audio processing
@@ -22,9 +21,9 @@ const int DB_THRESHOLD = -10;  // filter out the frames less than this
  * Constant numbers for CENS
  */
 const int SAMPLES_PER_FRAME_CHROMA = 4096;	// 256 ms with RESAMPLE_FREQ
-const int HOP_SIZE_CHROMA = 2048;
-const int LONG_WINDOW = 32;					// long window size
-const int HOP_SIZE_LONG = 8;					// long window hop size
+const int HOP_SIZE_CHROMA = 2048;           // 128 ms with RESAMPLE_FREQ
+const int LONG_WINDOW = 32;					// long window size, 4096 ms with RESAMPLE_FREQ 
+const int HOP_SIZE_LONG = 8;					// long window hop size, 1024 ms with RESAMPLE_FREQ
 
 const int HIGH_CUTOFF = 2000;
 const int LOW_CUTOFF = 40;
@@ -67,6 +66,10 @@ const float alpha = 2.3;
 
 
 const float MIN_LENGTH_SECS = 5.0; //secs
+
+
+const float MATCHING_THRESHOLD = 0.15;
+const float SEGMENT_LENGTH = 40;
 
 #endif
 

@@ -1,5 +1,5 @@
 #ifndef ADUIO_CLIP_H
-#define AUDIO_READER_H
+#define AUDIO_CLIP_H
 
 #include "stdlib.h"
 #include <iostream>
@@ -9,7 +9,8 @@ using namespace std;
  */
 class Audio_clip {
 public:
-	Audio_clip(const char* _filename);
+	Audio_clip(const char* _filename){};
+    ~Audio_clip(){};
 	void set_cluster_id(int _cluster_id) {cluster_id = _cluster_id;};
 	const char* get_filename() {return filename;};
 	void set_start(int _start) {start = _start;};
