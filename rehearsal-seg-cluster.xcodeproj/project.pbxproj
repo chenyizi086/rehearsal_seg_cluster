@@ -14,6 +14,15 @@
 		9F79B91D14D15128001C8680 /* hmm_smoother.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F79B91C14D15128001C8680 /* hmm_smoother.cpp */; };
 		9FA869371497FEF400675AB9 /* rsc_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FA869361497FEF400675AB9 /* rsc_utils.cpp */; };
 		9FA869BE14981AEC00675AB9 /* FFT3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FA869BC14981AEC00675AB9 /* FFT3.cpp */; };
+		9FFBEFC9154F0DAD0036367D /* audio_clip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F75C3CF154E802300A7CA44 /* audio_clip.cpp */; };
+		9FFBEFDB154F0DDE0036367D /* feature_extractor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F75C3D8154E802300A7CA44 /* feature_extractor.cpp */; };
+		9FFBEFDC154F0DDE0036367D /* audiofilereader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F75C3D1154E802300A7CA44 /* audiofilereader.cpp */; };
+		9FFBEFDD154F0DDE0036367D /* audioreader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F75C3D3154E802300A7CA44 /* audioreader.cpp */; };
+		9FFBEFDE154F0DDE0036367D /* adaboost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F75C3CD154E802300A7CA44 /* adaboost.cpp */; };
+		9FFBEFEC154F0F380036367D /* libsamplerate.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FFBEFE6154F0F380036367D /* libsamplerate.0.dylib */; };
+		9FFBEFED154F0F380036367D /* libsamplerate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FFBEFE7154F0F380036367D /* libsamplerate.a */; };
+		9FFBEFEE154F0F390036367D /* libsndfile.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FFBEFE9154F0F380036367D /* libsndfile.1.dylib */; };
+		9FFBEFEF154F0F390036367D /* libsndfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FFBEFEA154F0F380036367D /* libsndfile.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -53,6 +62,12 @@
 		9FA8693B1497FF2300675AB9 /* rsc_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rsc_utils.h; sourceTree = "<group>"; };
 		9FA869BC14981AEC00675AB9 /* FFT3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FFT3.cpp; path = fft3/FFT3.cpp; sourceTree = "<group>"; };
 		9FA869BD14981AEC00675AB9 /* FFT3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FFT3.h; path = fft3/FFT3.h; sourceTree = "<group>"; };
+		9FFBEFE6154F0F380036367D /* libsamplerate.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libsamplerate.0.dylib; sourceTree = "<group>"; };
+		9FFBEFE7154F0F380036367D /* libsamplerate.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsamplerate.a; sourceTree = "<group>"; };
+		9FFBEFE8154F0F380036367D /* libsamplerate.la */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = libsamplerate.la; sourceTree = "<group>"; };
+		9FFBEFE9154F0F380036367D /* libsndfile.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libsndfile.1.dylib; sourceTree = "<group>"; };
+		9FFBEFEA154F0F380036367D /* libsndfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsndfile.a; sourceTree = "<group>"; };
+		9FFBEFEB154F0F380036367D /* libsndfile.la */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = libsndfile.la; sourceTree = "<group>"; };
 		C6859E8B029090EE04C91782 /* rehearsal-seg-cluster.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = "rehearsal-seg-cluster.1"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -61,6 +76,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9FFBEFEC154F0F380036367D /* libsamplerate.0.dylib in Frameworks */,
+				9FFBEFED154F0F380036367D /* libsamplerate.a in Frameworks */,
+				9FFBEFEE154F0F390036367D /* libsndfile.1.dylib in Frameworks */,
+				9FFBEFEF154F0F390036367D /* libsndfile.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,6 +89,7 @@
 		08FB7794FE84155DC02AAC07 /* rehearsal-seg-cluster */ = {
 			isa = PBXGroup;
 			children = (
+				9FFBEFE5154F0F380036367D /* lib */,
 				08FB7795FE84155DC02AAC07 /* Source */,
 				C6859E8C029090F304C91782 /* Documentation */,
 				1AB674ADFE9D54B511CA2CBB /* Products */,
@@ -162,6 +182,19 @@
 			name = Misc;
 			sourceTree = "<group>";
 		};
+		9FFBEFE5154F0F380036367D /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				9FFBEFE6154F0F380036367D /* libsamplerate.0.dylib */,
+				9FFBEFE7154F0F380036367D /* libsamplerate.a */,
+				9FFBEFE8154F0F380036367D /* libsamplerate.la */,
+				9FFBEFE9154F0F380036367D /* libsndfile.1.dylib */,
+				9FFBEFEA154F0F380036367D /* libsndfile.a */,
+				9FFBEFEB154F0F380036367D /* libsndfile.la */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
 		C6859E8C029090F304C91782 /* Documentation */ = {
 			isa = PBXGroup;
 			children = (
@@ -220,8 +253,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8DD76F650486A84900D96B5E /* main.cpp in Sources */,
 				9FA869371497FEF400675AB9 /* rsc_utils.cpp in Sources */,
+				9FFBEFDB154F0DDE0036367D /* feature_extractor.cpp in Sources */,
+				9FFBEFDC154F0DDE0036367D /* audiofilereader.cpp in Sources */,
+				9FFBEFDD154F0DDE0036367D /* audioreader.cpp in Sources */,
+				9FFBEFDE154F0DDE0036367D /* adaboost.cpp in Sources */,
+				8DD76F650486A84900D96B5E /* main.cpp in Sources */,
+				9FFBEFC9154F0DAD0036367D /* audio_clip.cpp in Sources */,
 				9FA869BE14981AEC00675AB9 /* FFT3.cpp in Sources */,
 				9F79B8FB14D1505D001C8680 /* music_noise_classifier.cpp in Sources */,
 				9F79B91D14D15128001C8680 /* hmm_smoother.cpp in Sources */,
@@ -245,6 +283,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/lib\"",
 				);
 				PRODUCT_NAME = "rehearsal-seg-cluster";
 			};
@@ -260,6 +299,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/lib\"",
 				);
 				PRODUCT_NAME = "rehearsal-seg-cluster";
 			};
@@ -270,6 +310,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DEBUGGING_SYMBOLS = full;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -310,7 +351,7 @@
 				1DEB923308733DC60010E9CD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		1DEB923508733DC60010E9CD /* Build configuration list for PBXProject "rehearsal-seg-cluster" */ = {
 			isa = XCConfigurationList;
@@ -319,7 +360,7 @@
 				1DEB923708733DC60010E9CD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};

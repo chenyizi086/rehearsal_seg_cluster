@@ -9,7 +9,7 @@ using namespace std;
  */
 class Audio_clip {
 public:
-	Audio_clip(const char* _filename){};
+	Audio_clip(const char* _filename);
     ~Audio_clip(){};
 	void set_cluster_id(int _cluster_id) {cluster_id = _cluster_id;};
 	const char* get_filename() {return filename;};

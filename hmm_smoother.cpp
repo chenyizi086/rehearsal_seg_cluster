@@ -1,5 +1,6 @@
 #include "hmm_smoother.h"
 #include "math.h"
+#include "stdio.h"
 #include "constant.h"
 #include <vector>
 #include <algorithm>
@@ -7,6 +8,11 @@
 #define MAX(x, y) x > y ? x:y
 
 void HMM_smoother::do_smooth(vector<float> ada_raw_result, vector<int> &result_with_smooth) {
+    
+#ifdef DEBUG
+    printf("============= START HMM SMOOTHING=============\n");
+#endif
+    
 	vector<float> viterbi_m, viterbi_n;
 	vector<int> path_m, path_n;
 	int ind, n_lframe = ada_raw_result.size();

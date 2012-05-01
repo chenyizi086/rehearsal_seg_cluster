@@ -19,14 +19,13 @@ double interpolate(double x1, double y1, double x2, double y2, double x)
 }
 
 vector<vector<float> > read_matfile(const char* filename) {
-    vector<vector<float> > table;    
+    vector<vector<float> > table; 
+    string line;
     // Load table from file
     ifstream file(filename);
-    while (file)
+    while (getline(file, line))
     {
-        string line;
         float data;
-        getline(file, line);
         istringstream is(line);
         vector<float> row;
         while (is >> data)

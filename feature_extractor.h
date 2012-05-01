@@ -15,7 +15,7 @@ bool is_midi_file(char *filename);
 // index into matrix to extract element of chroma vector
 #define AREF2(chrom_energy, row, column) AREF1(chrom_energy, row)[column]
 
-FILE *dbf = NULL;
+//FILE *dbf = NULL;
 
 class Audio_reader;
 
@@ -28,8 +28,7 @@ public:
      * return 1 if this is not the last frame, return 0 otherwise
      * the spectrum is stored in a vector of float number
      */
-    int get_spectrum(Audio_reader &reader, vector<float> &data_spec, float *frame_fb, bool verbose);
-    void db_normalize(vector<float> &data_db);
+    int get_spectrum(Audio_reader &reader, vector<float> &data_spec, bool verbose);
     int get_CENS(Audio_reader &reader, long nframes, vector<vector<float> > &data_out);
     void set_parameters(double _frame_period, double _window_size){
         frame_period = _frame_period;

@@ -16,8 +16,8 @@ public:
     virtual long get_frames() = 0; // returns frames of input audio 
     // i.e. (samples/channels)
     void calculate_parameters(Feature_extractor &fe, bool verbose);
-    Audio_reader(){};
-    ~Audio_reader(){};
+    Audio_reader();
+    ~Audio_reader();
 protected:
     bool reading_first_window;
     bool reading_last_window;

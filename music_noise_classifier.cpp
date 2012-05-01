@@ -7,37 +7,51 @@
 #include "feature_extractor.h"
 #include "music_noise_classifier.h"
 
-Feature_extractor fe;
+#include <iostream>
+using namespace std;
+
+Feature_extractor fe_mnc;
 Adaboost ada;
 HMM_smoother hmms;
 
-bool MNC_DEBUG_FLAG = true;
+bool MNC_DEBUG_FLAG = false;
 
 void Music_noise_classifier::load_adaboost_paras(const char* f_ada, const char* f_em) {
+#ifdef DEBUG
+    cout << "Loading AdaBoost parameters..." << endl;
+#endif
 	ada.load_classifier(f_ada);
 	ada.load_eigenmusic_inv(f_em);
 }
 
-void Music_noise_classifier::do_music_noise_classify(const char *filename, vector<Audio_clip> &clips) {
+void Music_noise_classifier::do_music_noise_classify(const char *filename, const char* f_ada, const char* f_em, vector<Audio_clip> &clips) {
 	vector<int> pred_result, result_no_smooth, result_with_smooth;
-	vector<float> ada_raw_result, data_db;
+	vector<float> ada_raw_result;
+    
+    load_adaboost_paras(f_ada, f_em);
 
-	do_adaboost(filename, pred_result, ada_raw_result, data_db);
+	do_adaboost(filename, pred_result, ada_raw_result);
 
 	hmms.do_smooth(ada_raw_result, result_with_smooth);
 
 	do_gen_clips(filename, result_with_smooth, clips);
 }
 
-void Music_noise_classifier::do_adaboost(const char *filename, vector<int> &pred_result, vector<float> &ada_raw_result, vector<float> &data_db) {
+void Music_noise_classifier::do_adaboost(const char *filename, vector<int> &pred_result, vector<float> &ada_raw_result) {
 	int i, count = 0;
 	Audio_file_reader reader;
 	vector<float> aver_spec, spectrum;
-	float db, ada_raw;
+	float ada_raw;
 	//no overlapping
-	fe.set_parameters(SAMPLES_PER_FRAME / RESAMPLE_FREQ, SAMPLES_PER_FRAME / RESAMPLE_FREQ);
-	reader.open(filename, fe, MNC_DEBUG_FLAG);
-	reader.resample(RESAMPLE_FREQ);
+	fe_mnc.set_parameters(SAMPLES_PER_FRAME / RESAMPLE_FREQ, SAMPLES_PER_FRAME / RESAMPLE_FREQ);
+	/*
+     *****************************FOR SIMPLICITY**************************
+     
+    reader.open(filename, fe_mnc, RESAMPLE_FREQ, MNC_DEBUG_FLAG);
+    */
+    
+    string t = "resample_" + string(filename);
+    reader.open(t.c_str(), fe_mnc, 0, MNC_DEBUG_FLAG);
     
     //init aver_spec
     aver_spec.assign(SAMPLES_PER_FRAME / 2 + 1, 0);
@@ -49,14 +63,17 @@ void Music_noise_classifier::do_adaboost(const char *filename, vector<int> &pred
 			for (i = 0; i < aver_spec.size(); i++) {
 				aver_spec[i] /= NUM_AVER;
 			}
+            pred_result.push_back(ada.do_prediction(aver_spec, &ada_raw));
 			ada_raw_result.push_back(ada_raw);
 			// reassign the average to 0
 			aver_spec.assign(SAMPLES_PER_FRAME / 2 + 1, 0);
 		}
 
-		if (fe.get_spectrum(reader, spectrum, &db, MNC_DEBUG_FLAG)) {
-			data_db.push_back(db);
+		if (fe_mnc.get_spectrum(reader, spectrum, MNC_DEBUG_FLAG)) {            
 #ifdef DEBUG
+            cout << aver_spec.size() << endl;
+            cout << spectrum.size() << endl;
+            cout << "frame # " << count << endl;
 			assert(aver_spec.size() == spectrum.size());
 			assert(spectrum.size() == SAMPLES_PER_FRAME / 2 + 1);
 #endif
@@ -65,6 +82,7 @@ void Music_noise_classifier::do_adaboost(const char *filename, vector<int> &pred
 			}
 			count++;
 		} else {
+            cout << "the last un-filled frame" << endl;
 			// handle the last frame, if any
 			if (count % NUM_AVER != 0) {
 				for (i = 0; i < aver_spec.size(); i++) {

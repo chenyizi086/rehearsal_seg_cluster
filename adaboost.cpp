@@ -2,25 +2,39 @@
 #include "constant.h"
 #include "rsc_utils.h"
 
+#include <iostream>
+
 void Adaboost::load_classifier(const char *f_ada) {
     parameters = read_matfile(f_ada); 
+#ifdef DEBUG
+    cout << parameters.size() << endl;
+    if (parameters.size() != 0) {
+        cout << parameters[0].size() << endl;
+    }
+#endif
 }
 
 void Adaboost::load_eigenmusic_inv(const char *f_em) {
     eigen_music_inv = read_matfile(f_em);
+#ifdef DEBUG
+    cout << eigen_music_inv.size() << endl;
+    if (eigen_music_inv.size() != 0) {
+        cout << eigen_music_inv[0].size() << endl;
+    }
+#endif
 }
 
 int Adaboost::do_prediction(vector<float> data, float* ada_raw) {
 	vector<float> data_eigen;
 	
-	int i,j;
+	int i,j, count_r, count_c;
 	float feature, sign, classifier;
-	float tmp = 0;
+	float tmp = 0, raw = 0;
 
-	*ada_raw = 0;
-
-	for (i = 0; i < eigen_music_inv.size(); i++) {
-		for (j = 0; j < eigen_music_inv[0].size(); j++) {
+    count_r = eigen_music_inv.size();
+    count_c = eigen_music_inv[0].size();
+	for (i = 0; i < count_r; i++) {
+		for (j = 0; j < count_c; j++) {
 			tmp += eigen_music_inv[i][j] * data[j];
 		}
 		data_eigen.push_back(tmp);
@@ -33,10 +47,10 @@ int Adaboost::do_prediction(vector<float> data, float* ada_raw) {
 		classifier = parameters[i][CLASSIFIER_INDEX];
 	
 		if (sign == 1) {
-			*ada_raw += ((data_eigen[feature - 1] > classifier ? 1:-1) * parameters[i][ALPHA_INDEX]);
+			raw += ((data_eigen[feature - 1] > classifier ? 1:-1) * parameters[i][ALPHA_INDEX]);
 			//result_weak.push_back(data_eigen[feature - 1] > classifier ? 1:-1);
 		} else {
-			*ada_raw += ((data_eigen[feature - 1] < classifier ? 1:-1) * parameters[i][ALPHA_INDEX]);
+			raw += ((data_eigen[feature - 1] < classifier ? 1:-1) * parameters[i][ALPHA_INDEX]);
 			//result_weak.push_back(data_eigen[feature - 1] < classifier ? 1:-1);
 		}
 	}
@@ -44,6 +58,7 @@ int Adaboost::do_prediction(vector<float> data, float* ada_raw) {
 	//for (i = 0; i < parameters.size(); i++) {
 	//	*ada_raw += result_weak[i] * parameters[i][3];
 	//}
+    *ada_raw = raw;
 	return *ada_raw > 0 ? 1:-1;
 }
 

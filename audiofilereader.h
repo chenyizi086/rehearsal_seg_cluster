@@ -5,30 +5,29 @@
 #include "sndfile.h"
 #include "audioreader.h"
 
+using namespace std;
+
 class Feature_extractor;
 
 class Audio_file_reader: public Audio_reader {
 public:
     Audio_file_reader(){};
-    ~Audio_file_reader(){free(temp_data);};
+    ~Audio_file_reader(){};
     virtual long read(float *data, long n);
     SNDFILE *sf;
-	SNDFILE *sf_rs;
     SF_INFO sf_info;
-	SF_INFO sf_info_rs;
     char name[MAX_NAME_LEN + 1];
     int bytes_per_frame;
     long total_frames;
-	long total_frames_rs;
-    bool open(const char *filename, Feature_extractor &fe, bool verbose);
-	bool open(const char *filename, Feature_extractor &fe, int start_frame, bool verbose);
+    bool open(const char *filename, Feature_extractor &fe, int rsamplerate, bool verbose);
+	bool open(const char *filename, Feature_extractor &fe, int start_frame, int rsamplerate, bool verbose);
     void close();
     double get_sample_rate();
-	double get_sample_rate_rs();
-	long get_frames_rs();
     long get_frames();
     void print_info();
-	void resample(int rsamplerate);
+	string resample(int rsamplerate);
+private:
+    sf_count_t sample_rate_convert(SNDFILE *sf_rs, int converter, double src_ratio, int channels, double *gain);	
 };
 
 #endif

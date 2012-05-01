@@ -30,21 +30,21 @@ bool FE_DEBUG_FLAG = true;
 
 Feature_extractor::Feature_extractor() {
 #ifdef DEBUG_LOG
-	dbf = fopen("feature_extractor_debug.txt", "w");
-	assert(dbf);
+	//dbf = fopen("feature_extractor_debug.txt", "w");
+	//assert(dbf);
 #endif
 }
 
 Feature_extractor::~Feature_extractor() {
 #ifdef DEBUG_LOG
-	fclose(dbf);
+	//fclose(dbf);
 #endif
 }
 
-int Feature_extractor::get_spectrum(Audio_reader &reader, vector<float> &data_spec, float *frame_db, bool verbose) {
+int Feature_extractor::get_spectrum(Audio_reader &reader, vector<float> &data_spec, bool verbose) {
 	int i;
 	int has_next = 0;
-    float sample_rate = reader.get_sample_rate();
+    //float sample_rate = reader.get_sample_rate();
 	// output data should be empty
 	if (!data_spec.empty()) {
 		data_spec.clear();
@@ -112,17 +112,32 @@ int Feature_extractor::get_spectrum(Audio_reader &reader, vector<float> &data_sp
 		gen_Magnitude(fft_dataR, fft_dataI, reader.samples_per_frame, frame_data);
 
 		float sq_sum = 0.0;
-		for (i = 0; i < frame_size; i++) {
+		for (i = 0; i < frame_size / 2 + 1; i++) {
 			sq_sum += frame_data[i] * frame_data[i];
 		}
 
-		*frame_db = 10 * log10(sq_sum / frame_size);
-
-		float norm = sqrt(sq_sum);
-		for (i = 0; i < frame_size; i++) {
+		float norm = sqrtf(sq_sum);
+        
+        if (norm < 0.000001) {
+            norm = 1.0;   // avoid 0/0
+        }
+        
+		for (i = 0; i < frame_size / 2 + 1; i++) {
 			data_spec.push_back(frame_data[i] / norm);
 		}
     } 
+    
+#ifdef DEBUG
+    float sq_sum = 0;
+    for (i = 0; i < data_spec.size(); i++) {
+        sq_sum += data_spec[i] * data_spec[i];
+    }
+    cout << sq_sum << endl;
+    if (sq_sum > 0.0001) {
+        assert(sq_sum - 1 > -0.0001);
+    assert(sq_sum - 1 < 0.0001);
+    }
+#endif
 
     free(fft_dataI);
     free(fft_dataR);
@@ -131,23 +146,6 @@ int Feature_extractor::get_spectrum(Audio_reader &reader, vector<float> &data_sp
 
 	return has_next;
 }	
-
-void Feature_extractor::db_normalize(vector<float> &data_db) {
-	vector<float> tmp = data_db;
-	float db_stand;
-	int i, size = tmp.size();
-
-	sort(tmp.begin(), tmp.end());
-	db_stand = tmp[(int)(0.95 * size + 0.5)];
-#ifdef DEBUG
-	printf("The standard db is %f\n", db_stand);
-#endif
-	for (i = 0; i < size; i++) {
-		//data_out.push_back(data_in.at(i) + (DB_CENTER - db_stand));
-		data_db[i] += (DB_CENTER - db_stand);
-	}
-}
-
 
 int Feature_extractor::get_CENS(Audio_reader &reader, long nframes, vector<vector<float> > &data_cens) {
 	int actual_nframes, i, j, k, l;
@@ -187,7 +185,7 @@ int Feature_extractor::get_CENS(Audio_reader &reader, long nframes, vector<vecto
 	// and hanning window, then downsampling by factor of HOP_SIZE_LONG
 	for (i = 0; i < nframes; i += HOP_SIZE_LONG) {
 		for (j = 0; j < CHROMA_BIN_COUNT; j++) {
-			float *chroma_bin = (AREF1(chroma, i) + j);
+			chroma_bin = (AREF1(chroma, i) + j);
 			calculate_conv(chroma_bin, (int)LONG_WINDOW, hanning, (int)LONG_WINDOW, chroma_conv);
 			for (k = 0; k < 2 * LONG_WINDOW - 1; k += HOP_SIZE_LONG) {
 				int offset = (i / HOP_SIZE_LONG) *((2 * LONG_WINDOW - 1) / HOP_SIZE_LONG);
@@ -217,7 +215,7 @@ void Feature_extractor::calculate_conv(float *chroma_bin, const int len1, float 
 	for (i = 0; i < len_conv; i++) {
 		for (j = 0, k = i; j < len1 && k >=0; j++, k--) {
 			if (k < len2) {
-				chroma_at = *(chroma + j * (CHROMA_BIN_COUNT + 1));
+				chroma_at = *(chroma_bin + j * (CHROMA_BIN_COUNT + 1));
 				out[i] += window[k] * chroma_at;
 			}
 		}
@@ -324,18 +322,6 @@ int min_Bin_Num(float* bins, int numBins){
     return minIndex;
 }
 
-
-/*				NEXTPOWEROF2
- given an int n, finds the next power of 2 larger than
- or equal to n.
- */
-int nextPowerOf2(int n)
-{
-    int result = 1;
-    while (result < n) result = (result << 1);
-    return result;
-}
-
 void gen_Magnitude_range(float* inR, float* inI, int low, int hi, float* out)
 {
     int i;
@@ -344,8 +330,8 @@ void gen_Magnitude_range(float* inR, float* inI, int low, int hi, float* out)
         float magVal = sqrt(inR[i] * inR[i] + inI[i] * inI[i]);
         //printf("   %d: sqrt(%g^2+%g^2)=%g\n",i,inR[i],inI[i+1],magVal);
         out[i]= magVal;
-#ifdef SA_VERBOSE
-        if (i == 1000) fprintf(dbf, "gen_Magnitude: %d %g\n", i, magVal);
+#ifdef DEBUG_LOG
+        //if (i == 1000) fprintf(dbf, "gen_Magnitude: %d %g\n", i, magVal);
 #endif
     }
 }
@@ -408,7 +394,7 @@ int Feature_extractor::gen_chroma(Audio_reader &reader, int hcutoff,
         reader.print_info();
     }
 #ifdef DEBUG_LOG
-    fprintf(dbf, "******** BEGIN AUDIO CHROMA COMPUTATION *********\n");
+    //fprintf(dbf, "******** BEGIN AUDIO CHROMA COMPUTATION *********\n");
 #endif
     // this seems like a poor way to set actual_frame_period_0 or _1 in 
     // the Scorealign object, but I'm not sure what would be better:
@@ -491,15 +477,14 @@ int Feature_extractor::gen_chroma(Audio_reader &reader, int hcutoff,
     for (int count = 0; count < nframes; count++) {
 		assert(reader.read_window(full_data) != 0);
         //fill out array with 0's till next power of 2
-#ifdef SA_VERBOSE
-        fprintf(dbf, "samples_per_frame %d sample %g\n", 
-                reader.samples_per_frame, full_data[0]);
+#ifdef DEBUG_LOG
+        //fprintf(dbf, "samples_per_frame %d sample %g\n", reader.samples_per_frame, full_data[0]);
 #endif
         for (i = reader.samples_per_frame; i < full_data_size; i++) 
             full_data[i] = 0;
         
-#ifdef SA_VERBOSE
-        fprintf(dbf, "preFFT: full_data[1000] %g\n", full_data[1000]);
+#ifdef DEBUG_LOG
+        //fprintf(dbf, "preFFT: full_data[1000] %g\n", full_data[1000]);
 #endif
         
         // compute the RMS, then apply the Hamming window to the data
@@ -511,9 +496,8 @@ int Feature_extractor::gen_chroma(Audio_reader &reader, int hcutoff,
         }
         rms = sqrt(rms / reader.samples_per_frame);
         
-#ifdef SA_VERBOSE
-        fprintf(dbf, "preFFT: hammingData[1000] %g\n", 
-                full_data[1000]);
+#ifdef DEBUG_LOG   
+        //fprintf(dbf, "preFFT: hammingData[1000] %g\n", full_data[1000]);
 #endif
         FFT3(full_data_size, 0, full_data, NULL, fft_dataR, fft_dataI); //fft3
         
@@ -541,8 +525,8 @@ int Feature_extractor::gen_chroma(Audio_reader &reader, int hcutoff,
             binCount[mod_bin]++;
         }
         
-#ifdef SA_VERBOSE
-        fprintf(dbf, "cv_index %d\n", cv_index);
+#ifdef DEBUG_LOG
+        //fprintf(dbf, "cv_index %d\n", cv_index);
 #endif
         assert(cv_index < nframes);
         float *cv = AREF1(*chrom_energy, cv_index);
@@ -558,11 +542,11 @@ int Feature_extractor::gen_chroma(Audio_reader &reader, int hcutoff,
 		// no matter what, normalize the non-silenced
         normalize(cv);
 #ifdef DEBUG_LOG
-        fprintf(dbf, "%d@%g) ", cv_index, cv_index * reader.actual_frame_period);
-        for (int i = 0; i < CHROMA_BIN_COUNT; i++) {
-            fprintf(dbf, "%d:%g ", i, cv[i]);
-        }
-        fprintf(dbf, " sil?:%g\n\n", cv[CHROMA_BIN_COUNT]);
+        //fprintf(dbf, "%d@%g) ", cv_index, cv_index * reader.actual_frame_period);
+        //for (int i = 0; i < CHROMA_BIN_COUNT; i++) {
+        //    fprintf(dbf, "%d:%g ", i, cv[i]);
+        //}
+        //fprintf(dbf, " sil?:%g\n\n", cv[CHROMA_BIN_COUNT]);
 #endif
         cv_index++;
     } // end of while ((readcount = read_mono_floats...

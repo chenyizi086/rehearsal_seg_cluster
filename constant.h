@@ -10,7 +10,7 @@
  * Constant numbers for adaboost audio processing
  */
 const int SAMPLES_PER_FRAME = 4096;
-const int RESAMPLE_FREQ = 16000;	
+const float RESAMPLE_FREQ = 16000;	
 const int NUM_AVER = 5;		// the spectrums will be averaged every 5 frames
 
 const int DB_CENTER = 20;

@@ -11,8 +11,7 @@
 #include "constant.h"
 #include <sstream>
 
-Feature_extractor fe;
-Audio_file_reader reader;
+Feature_extractor fe_clip;
 
 bool CLUSTER_DEBUG_FLAG = true;
 
@@ -21,7 +20,7 @@ Clip_cluster::Clip_cluster() {
 }
 
 Clip_cluster::~Clip_cluster() {
-    if (all_temp_cens.size() != 0 && all_temp_cens[0].size() != 0 && all_temp_cens[0][0] != NULL ) {
+    if (!all_temp_cens.empty()) {
         for (int i = 0; i < all_temp_cens.size(); i++) {
             for (int j = 0; j < all_temp_cens[0].size(); j++) {
                 free(all_temp_cens[i][j]);
@@ -36,7 +35,7 @@ Clip_cluster::~Clip_cluster() {
 void Clip_cluster::do_cluster(vector<Audio_clip> &clips) {
     int i;
     //50% overlapping
-    fe.set_parameters(SAMPLES_PER_FRAME_CHROMA / RESAMPLE_FREQ, HOP_SIZE_CHROMA / RESAMPLE_FREQ);
+    fe_clip.set_parameters(SAMPLES_PER_FRAME_CHROMA / RESAMPLE_FREQ, HOP_SIZE_CHROMA / RESAMPLE_FREQ);
     // Load all the templates CENS for cluster centroids if any 
     for (i = 0; i < clips.size(); i++) {
         do_clip_cluster(clips[i]);	
@@ -53,13 +52,15 @@ void Clip_cluster::do_clip_cluster(Audio_clip clip) {
     vector<float> min_dist;
     vector<int> exchanges;
     
+    Audio_file_reader reader_clip;
+    
     atc_readname = (char*)clip.get_filename();
     start = clip.get_start();
     end = clip.get_end();
     
-    reader.open(atc_readname, fe, start * SAMPLES_PER_FRAME * NUM_AVER, CLUSTER_DEBUG_FLAG);
+    reader_clip.open(atc_readname, fe_clip, start * SAMPLES_PER_FRAME * NUM_AVER, 0, CLUSTER_DEBUG_FLAG);
     nframes = (end - start + 1) * NUM_AVER;
-    fe.get_CENS(reader, nframes, data_raw);
+    fe_clip.get_CENS(reader_clip, nframes, data_raw);
     
     for (int i = 0; i < data_raw.size(); i++) {
         float *tmp = ALLOC(float, CHROMA_BIN_COUNT + 1);
