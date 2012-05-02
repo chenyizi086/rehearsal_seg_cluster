@@ -148,10 +148,9 @@ string Audio_file_reader::resample(int new_sample_rate) {
     /* Update the file header after every write. */
     sf_command (sf_rs, SFC_SET_UPDATE_HEADER_AUTO, NULL, SF_TRUE);
     
-    sf_command (sf_rs, SFC_SET_CLIPPING, NULL, SF_FALSE) ;
+    sf_command (sf_rs, SFC_SET_CLIPPING, NULL, SF_TRUE) ;
     
     sample_rate_convert (sf_rs, converter, src_ratio, sf_info.channels, &gain) ;
-    
     
     sf_close(sf_rs);
     

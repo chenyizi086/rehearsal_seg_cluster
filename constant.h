@@ -17,6 +17,11 @@ const int DB_CENTER = 20;
 const int DB_THRESHOLD = -10;  // filter out the frames less than this
 
 
+const int FILENAME_INDEX = 0;
+const int START_INDEX = 1;
+const int END_INDEX = 2;
+const int CLUSTER_ID_INDEX = 3;
+
 /*
  * Constant numbers for CENS
  */

@@ -21,23 +21,77 @@ bool CLUSTER_DEBUG_FLAG = true;
 
 Clip_cluster::Clip_cluster() {
     load_all_temp_cens();
+    load_database();
 }
 
 Clip_cluster::~Clip_cluster() {
-    //if (!all_temp_cens.empty()) {
-    //    for (int i = 0; i < all_temp_cens.size(); i++) {
-    //        for (int j = 0; j < all_temp_cens[0].size(); j++) {
-    //            free(all_temp_cens[i][j]);
-    //        }
-    //    }
-    //}
+    int i, j;
+    if (!all_temp_cens.empty()) {
+        for (i = 0; i < all_temp_cens.size(); i++) {
+            for (j = 0; j < all_temp_cens[i].size(); j++) {
+                free(all_temp_cens[i][j]);
+            }
+        }
+    }
+    
     if (atc_write.is_open()) {
         atc_write.close();
     }
+    if (db_write.is_open()) {
+        db_write.close();
+    }
+}
+
+void Clip_cluster::load_database() {
+    string line;
+    ifstream db_read("databases.txt");
+#ifdef DEBUG    
+    int count = 0;
+#endif
+    // Load table from file
+    while (getline(db_read, line))
+    {
+        string filename; 
+        int start, end, cluster_id;
+        istringstream is(line);
+        is >> filename;
+        is >> start;
+        is >> end;
+        is >> cluster_id;
+        
+        cout << filename << endl;
+        cout << start << endl;
+        cout << end << endl;
+        cout << cluster_id << endl;
+        
+        Audio_clip *clip = new Audio_clip(filename);
+        clip->set_start(start);
+        clip->set_end(end);
+        clip->is_music = true;
+        clip->set_cluster_id(cluster_id);
+        
+        vector<Audio_clip *> db_clips = db[cluster_id];
+        db_clips.push_back(clip);
+        db[cluster_id] = db_clips;
+#ifdef DEBUG
+        count++;
+        cout << "db for cluster " << cluster_id << endl;
+        for (int i = 0; i < db[cluster_id].size(); i++) {
+            cout << db[cluster_id][i]->get_filename() << " " << db[cluster_id][i]->get_start() << " " << db[cluster_id][i]->get_cluster_id() << endl;
+        }
+#endif
+    }
+#ifdef DEBUG
+    cout << count << " clips have been read" << endl;
+#endif
+    db_read.close();
 }
 
 void Clip_cluster::do_cluster(vector<Audio_clip *> &clips) {
-    int i;
+    int i, j;
+    map<int, vector<Audio_clip *> >::iterator it;
+    vector<Audio_clip *> db_clips;
+    Audio_clip *clip;
     
 #ifdef DEBUG
     cout << "=============== START CLUSTERING ===============" << endl;
@@ -50,32 +104,54 @@ void Clip_cluster::do_cluster(vector<Audio_clip *> &clips) {
     for (i = 0; i < clips.size(); i++) {
 #ifdef DEBUG
         cout << endl;
-        cout << "******************** TO CLUSTER Cilp " << i << "***********************" << endl;
+        cout << "******************** TO CLUSTER CLIP " << i << "***********************" << endl;
 #endif
-        do_clip_cluster(clips[i]);	
+        clip = clips[i];
+        do_clip_cluster(clip);
+        
+        bool exist = false;
+        for (it = db.begin();it != db.end(); it++) { 
+            db_clips = (*it).second;
+            for (j = 0; j < db_clips.size(); j++) {
+                if (*clip == *db_clips[j]) {
+#ifdef DEBUG
+                    printf("The cilp in file %s, starting from %d to %d is in the database already\n", (clip->get_filename()).c_str(), clip->get_start(), clip->get_end());
+#endif
+                    exist = true;
+                    break;
+                }
+            }
+        }
+        if (!exist) {
+            write_to_db(clip);
+        }
     }
 #ifdef DEBUG
     cout << "********************** Processing Summary **************************" << endl;
     for (i = 0; i < clips.size(); i++) {
         cout << *clips[i] << endl;
     }
+    cout << endl;
 #endif
 }
 
 
-void Clip_cluster::write_to_db(vector<Audio_clip *> &clips) {
+void Clip_cluster::write_to_db(Audio_clip *clip) {
     stringstream ss;
     db_write.open("databases.txt", ios_base::app);
-    for( int i = 0; i < clips.size(); i++) {
-        ss << *clips[i] << endl;
-    }
+    ss << *clip << endl;
     string out = ss.str();
     db_write.write(out.c_str(), out.size());
+    db_write.close();
+    
+    vector<Audio_clip *> db_clips = db[clip->get_cluster_id()];
+    db_clips.push_back(clip);
+    db[clip->get_cluster_id()] = db_clips;
 }
 
 
 void Clip_cluster::do_clip_cluster(Audio_clip *clip) {
-    char *atc_readname;
+    string atc_readname;
     string atc_rsample_name;
     int start, end;
     long nframes;
@@ -84,18 +160,16 @@ void Clip_cluster::do_clip_cluster(Audio_clip *clip) {
     
     Audio_file_reader reader_clip;
     
-    atc_readname = (char*)clip->get_filename();
+    atc_readname = clip->get_filename();
     atc_rsample_name = "resample_" + string(atc_readname);
-
+    
     start = clip->get_start();
     end = clip->get_end();
     
     min_dist.assign(nclusters, 0.0f);
     
     reader_clip.open(atc_rsample_name.c_str(), fe_clip, start * SAMPLES_PER_FRAME * NUM_AVER, 0, CLUSTER_DEBUG_FLAG);
-#ifdef DEBUG
-    reader_clip.print_info();
-#endif
+    
     nframes = (end - start + 1) * NUM_AVER * (SAMPLES_PER_FRAME_CHROMA / HOP_SIZE_CHROMA);
     fe_clip.get_CENS(reader_clip, nframes, data_cens);
     
@@ -123,14 +197,6 @@ void Clip_cluster::compare_and_cluster(Audio_clip *clip, vector<float*> &data_ce
     for (i = 0; i < nclusters; i++) {
         vector<float> dists;
         int exchange = dist_CENS(data_cens, all_temp_cens[i], dists);
-
-#ifdef DEBUG
-        cout << "dist size " << dists.size() << endl;
-        for (int j = 0; j < dists.size(); j++) {
-            cout << dists[j] << " ";
-        }
-        cout << endl;
-#endif
         
         exchanges.push_back(exchange);
         
@@ -150,8 +216,6 @@ void Clip_cluster::compare_and_cluster(Audio_clip *clip, vector<float*> &data_ce
             write_to_atc(data_cens, index); 
             all_temp_cens[index] = data_cens;
             clip->is_centroid = true;
-            // TODO:
-            // remove the centroid label for the original centroid
             
             all_temp_cens[index] = data_cens;
         }  else {
@@ -164,7 +228,8 @@ void Clip_cluster::compare_and_cluster(Audio_clip *clip, vector<float*> &data_ce
         write_to_atc(data_cens, nclusters - 1);
         clip->set_cluster_id(nclusters - 1);
         clip->is_centroid = true;
-        all_temp_cens.push_back(data_cens);
+        
+        all_temp_cens.push_back(data_cens); 
     }
 }    
 
@@ -295,11 +360,11 @@ vector<float*> Clip_cluster::read_temp(string filename) {
     }
     return cens;
 }
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+

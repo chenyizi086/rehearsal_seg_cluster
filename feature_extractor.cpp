@@ -43,6 +43,7 @@ Feature_extractor::~Feature_extractor() {
 #ifdef DEBUG_LOG
 	fclose(dbf);
 #endif
+    
 }
 
 int Feature_extractor::get_spectrum(Audio_reader &reader, vector<float> &data_spec, bool verbose) {
@@ -201,6 +202,7 @@ int Feature_extractor::get_CENS(Audio_reader &reader, long nframes, vector<float
         cout << AREF2(chroma, i, CHROMA_BIN_COUNT) << endl;
 #endif
          */
+        
 	}
     
 	// claculate CENS, which is the convoltion of chroma stat help
