@@ -24,13 +24,13 @@ Clip_cluster::Clip_cluster() {
 }
 
 Clip_cluster::~Clip_cluster() {
-    if (!all_temp_cens.empty()) {
-        for (int i = 0; i < all_temp_cens.size(); i++) {
-            for (int j = 0; j < all_temp_cens[0].size(); j++) {
-                free(all_temp_cens[i][j]);
-            }
-        }
-    }
+    //if (!all_temp_cens.empty()) {
+    //    for (int i = 0; i < all_temp_cens.size(); i++) {
+    //        for (int j = 0; j < all_temp_cens[0].size(); j++) {
+    //            free(all_temp_cens[i][j]);
+    //        }
+    //    }
+    //}
     if (atc_write.is_open()) {
         atc_write.close();
     }
@@ -48,8 +48,18 @@ void Clip_cluster::do_cluster(vector<Audio_clip *> &clips) {
     fe_clip.set_parameters(HOP_SIZE_CHROMA / RESAMPLE_FREQ, SAMPLES_PER_FRAME_CHROMA / RESAMPLE_FREQ);
     // Load all the templates CENS for cluster centroids if any 
     for (i = 0; i < clips.size(); i++) {
+#ifdef DEBUG
+        cout << endl;
+        cout << "******************** TO CLUSTER Cilp " << i << "***********************" << endl;
+#endif
         do_clip_cluster(clips[i]);	
     }
+#ifdef DEBUG
+    cout << "********************** Processing Summary **************************" << endl;
+    for (i = 0; i < clips.size(); i++) {
+        cout << *clips[i] << endl;
+    }
+#endif
 }
 
 void Clip_cluster::do_clip_cluster(Audio_clip *clip) {
@@ -103,6 +113,7 @@ void Clip_cluster::compare_and_cluster(Audio_clip *clip, vector<float*> &data_ce
         int exchange = dist_CENS(data_cens, all_temp_cens[i], dists);
 
 #ifdef DEBUG
+        cout << "dist size " << dists.size() << endl;
         for (int j = 0; j < dists.size(); j++) {
             cout << dists[j] << " ";
         }
@@ -141,6 +152,7 @@ void Clip_cluster::compare_and_cluster(Audio_clip *clip, vector<float*> &data_ce
         write_to_atc(data_cens, nclusters - 1);
         clip->set_cluster_id(nclusters - 1);
         clip->is_centroid = true;
+        all_temp_cens.push_back(data_cens);
     }
 }    
 
@@ -180,14 +192,36 @@ int Clip_cluster::dist_CENS(vector<float*>  &query_cens, vector<float*> &templat
         return 1;
     }
     
-    int i, j, k, len_q = query_cens.size(), len_t = template_cens.size();
+    int i, j, k, len_q, len_t = template_cens.size();
+    int begin, end, length;
     float dot_prod, sum;
+    
+
+    // only the middle SEGMENT_LENGTH long frames (1.024 sec) are used for compare
+    length = query_cens.size();
+    if (length <= SEGMENT_LENGTH) {
+#ifdef DEBUG
+        cout << "Length less than " << SEGMENT_LENGTH << " frames, use original length" << endl;
+#endif
+        begin = 0;
+        end = length;
+    } else {
+        begin = (length - SEGMENT_LENGTH) / 2;
+        end = begin + SEGMENT_LENGTH;
+#ifdef DEBUG
+        printf("Larger than %d frames, use middle parts from %d to %d\n", SEGMENT_LENGTH, begin, end);
+#endif
+    }
+    len_q = end - begin;
+    
+    //begin = 0;
+    //len_q = query_cens.size()
     for (i = 0; i < len_t - len_q + 1; i++) {
         sum = 0;
 	    for (j = 0; j < CHROMA_BIN_COUNT; j++) {
             dot_prod = 0;
 	        for (k = 0; k < len_q; k++) {
-                dot_prod += query_cens[k][j] * template_cens[k + i][j];
+                dot_prod += query_cens[k + begin][j] * template_cens[k + i][j];
             }
             sum += dot_prod;
 	    }

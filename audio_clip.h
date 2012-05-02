@@ -22,7 +22,7 @@ public:
 	bool is_music;
 	friend ostream &operator << (ostream &os, Audio_clip &clip )
     {
-		os << clip.get_filename() << "\t[" << clip.get_start() << ", " << clip.get_end() << "]\t" << int(clip.is_music);
+		os << clip.get_filename() << "\t[" << clip.get_start() << ", " << clip.get_end() << "]\t" << int(clip.cluster_id);
         return os;
 	}
 

@@ -174,9 +174,11 @@ int Feature_extractor::get_CENS(Audio_reader &reader, long nframes, vector<float
 	for (i = 0; i < nframes; i++) {
 		for (j = 0; j < CHROMA_BIN_COUNT; j++) {
             float tmp = 0;
+            /*
 #ifdef DEBUG
             printf("%f (", AREF2(chroma, i, j));
 #endif
+             */
 			for (k = QUANT_SIZE - 1; k >= 0; k--) {
                 if (AREF2(chroma, i, j) < VEC_ENERGY[k]) {
                     break;
@@ -188,13 +190,17 @@ int Feature_extractor::get_CENS(Audio_reader &reader, long nframes, vector<float
 				}
             }
             AREF2(chroma, i, j) = tmp;
+/*
 #ifdef DEBUG
             cout << AREF2(chroma, i, j) << ") ";
 #endif
+ */
 		}
+        /*
 #ifdef DEBUG  
         cout << AREF2(chroma, i, CHROMA_BIN_COUNT) << endl;
 #endif
+         */
 	}
     
 	// claculate CENS, which is the convoltion of chroma stat help
@@ -223,7 +229,8 @@ int Feature_extractor::get_CENS(Audio_reader &reader, long nframes, vector<float
     for (i = 0; i < count; i++) {
         norm_l2(data_cens[i]);
     }
-    
+
+/*
 #ifdef DEBUG
     for (i = 0; i < count; i++) {
         for (j = 0; j < CHROMA_BIN_COUNT; j++) {
@@ -232,7 +239,7 @@ int Feature_extractor::get_CENS(Audio_reader &reader, long nframes, vector<float
         cout << endl;
     }
 #endif
-    
+*/    
     free(chroma);	
 	return 0;
 }
@@ -274,13 +281,15 @@ void Feature_extractor::calculate_conv(float *chroma_bin, const int len1, float 
 			}
 		}
 	}
-    
+ 
+    /*
 #ifdef DEBUG
     for (i = 0; i < len_conv; i++) {
         printf("%f ", out[i]);
     }
     printf("\n\n");
 #endif
+     */
 }
 
 /*				GEN_MAGNITUDE
