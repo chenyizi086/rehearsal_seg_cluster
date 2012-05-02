@@ -278,8 +278,8 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>21</integer>
-									<integer>18</integer>
+									<integer>17</integer>
+									<integer>15</integer>
 									<integer>2</integer>
 									<integer>0</integer>
 								</array>
@@ -322,7 +322,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>music_noise_classifier.cpp</string>
+								<string>clip_cluster.cpp</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -330,11 +330,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>music_noise_classifier.cpp</string>
+										<string>clip_cluster.cpp</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>9FFD21361551252B0075CAE5</string>
+										<string>9FFD213B155125FE0075CAE5</string>
 										<key>history</key>
 										<array>
 											<string>9F75C504154E8DBE00A7CA44</string>
@@ -361,13 +361,13 @@
 											<string>9FFBF6F5155115990036367D</string>
 											<string>9FFBF71E155119480036367D</string>
 											<string>9FFBF71F155119480036367D</string>
-											<string>9FFBF720155119480036367D</string>
 											<string>9FFBF77E1551248A0036367D</string>
 											<string>9FFBF77F1551248A0036367D</string>
 											<string>9FFBF7801551248A0036367D</string>
 											<string>9FFBF7811551248A0036367D</string>
 											<string>9FFBF7821551248A0036367D</string>
-											<string>9FFBF78F155125190036367D</string>
+											<string>9FFD213A155125FE0075CAE5</string>
+											<string>9FFBF720155119480036367D</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>

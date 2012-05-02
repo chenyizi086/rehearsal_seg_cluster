@@ -542,7 +542,7 @@ int Feature_extractor::gen_chroma(Audio_reader &reader, int hcutoff,
     gen_Hamming(hamming, reader.samples_per_frame);
     
     for (int count = 0; count < nframes; count++) {
-		//assert(reader.read_window(full_data) != 0);
+        reader.read_window(full_data);
         //fill out array with 0's till next power of 2
 #ifdef DEBUG_LOG
         //fprintf(dbf, "samples_per_frame %d sample %g\n", reader.samples_per_frame, full_data[0]);

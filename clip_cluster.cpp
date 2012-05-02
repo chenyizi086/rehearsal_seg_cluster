@@ -71,6 +71,9 @@ void Clip_cluster::do_clip_cluster(Audio_clip *clip) {
     min_dist.assign(nclusters, 0.0f);
     
     reader_clip.open(atc_rsample_name.c_str(), fe_clip, start * SAMPLES_PER_FRAME * NUM_AVER, 0, CLUSTER_DEBUG_FLAG);
+#ifdef DEBUG
+    reader_clip.print_info();
+#endif
     nframes = (end - start + 1) * NUM_AVER * (SAMPLES_PER_FRAME_CHROMA / HOP_SIZE_CHROMA);
     fe_clip.get_CENS(reader_clip, nframes, data_cens);
     
@@ -122,7 +125,11 @@ void Clip_cluster::compare_and_cluster(Audio_clip *clip, vector<float*> &data_ce
         if (exchanges[index]) {
             // replace the template with this new one
             write_to_atc(data_cens, index); 
+            all_temp_cens[index] = data_cens;
             clip->is_centroid = true;
+            // TODO:
+            // remove the centroid label for the original centroid
+            
             all_temp_cens[index] = data_cens;
         }  else {
             clip->is_centroid = false;
