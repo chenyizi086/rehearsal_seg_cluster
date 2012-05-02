@@ -18,7 +18,7 @@ int main (int argc, char * const argv[]) {
     
     for (int i = 1; i < argc; i++) { 
         cout << argv[i] << endl;
-        vector<Audio_clip> clips;
+        vector<Audio_clip *> clips;
         classifier.do_music_noise_classify(argv[i], "./params/music_noise_classifier_energynorm_30.txt", "./params/eigen_music_inv_energynorm.txt", clips);
         cluster.do_cluster(clips);
     }

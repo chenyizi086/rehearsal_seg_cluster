@@ -51,10 +51,10 @@ const float p_n = 0.5;
 /* 
  * transition prob for HMM
  */
-const float pm_m = 0.95;	// p(music|music)
-const float pn_m = 0.05;	// p(noise|music)
-const float pm_n = 0.05;	// p(music|noise)
-const float pn_n = 0.95;	// p(noise|noise)
+const float pm_m = 0.99999;	// p(music|music)
+const float pn_m = 0.00001;	// p(noise|music)
+const float pm_n = 0.00001;	// p(music|noise)
+const float pn_n = 0.99999;	// p(noise|noise)
 
 /*
  * init prob for HMM
@@ -63,7 +63,6 @@ const float p_init_m = 0.1;
 const float p_init_n = 0.9;
 
 const float alpha = 2.3;
-
 
 const float MIN_LENGTH_SECS = 5.0; //secs
 

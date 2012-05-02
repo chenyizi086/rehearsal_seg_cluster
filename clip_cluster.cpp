@@ -11,6 +11,10 @@
 #include "constant.h"
 #include <sstream>
 
+#ifdef DEBUG
+#include <iostream>
+#endif
+
 Feature_extractor fe_clip;
 
 bool CLUSTER_DEBUG_FLAG = true;
@@ -32,119 +36,108 @@ Clip_cluster::~Clip_cluster() {
     }
 }
 
-void Clip_cluster::do_cluster(vector<Audio_clip> &clips) {
+void Clip_cluster::do_cluster(vector<Audio_clip *> &clips) {
     int i;
+    
+#ifdef DEBUG
+    cout << "=============== START CLUSTERING ===============" << endl;
+    cout << "Number of clips: " << clips.size() << endl;
+#endif
+    
     //50% overlapping
-    fe_clip.set_parameters(SAMPLES_PER_FRAME_CHROMA / RESAMPLE_FREQ, HOP_SIZE_CHROMA / RESAMPLE_FREQ);
+    fe_clip.set_parameters(HOP_SIZE_CHROMA / RESAMPLE_FREQ, SAMPLES_PER_FRAME_CHROMA / RESAMPLE_FREQ);
     // Load all the templates CENS for cluster centroids if any 
     for (i = 0; i < clips.size(); i++) {
         do_clip_cluster(clips[i]);	
     }
 }
 
-void Clip_cluster::do_clip_cluster(Audio_clip clip) {
+void Clip_cluster::do_clip_cluster(Audio_clip *clip) {
     char *atc_readname;
+    string atc_rsample_name;
     int start, end;
     long nframes;
-    vector<vector<float> > data_raw;
     vector<float*> data_cens;
-    vector<float>::iterator pos;
     vector<float> min_dist;
-    vector<int> exchanges;
     
     Audio_file_reader reader_clip;
     
-    atc_readname = (char*)clip.get_filename();
-    start = clip.get_start();
-    end = clip.get_end();
+    atc_readname = (char*)clip->get_filename();
+    atc_rsample_name = "resample_" + string(atc_readname);
+
+    start = clip->get_start();
+    end = clip->get_end();
     
-    reader_clip.open(atc_readname, fe_clip, start * SAMPLES_PER_FRAME * NUM_AVER, 0, CLUSTER_DEBUG_FLAG);
-    nframes = (end - start + 1) * NUM_AVER;
-    fe_clip.get_CENS(reader_clip, nframes, data_raw);
+    min_dist.assign(nclusters, 0.0f);
     
-    for (int i = 0; i < data_raw.size(); i++) {
-        float *tmp = ALLOC(float, CHROMA_BIN_COUNT + 1);
-        for (int j = 0; j < CHROMA_BIN_COUNT + 1; j++) {
-            tmp[j] = data_raw[i][j];
-        }
-        data_cens.push_back(tmp);
-    }
+    reader_clip.open(atc_rsample_name.c_str(), fe_clip, start * SAMPLES_PER_FRAME * NUM_AVER, 0, CLUSTER_DEBUG_FLAG);
+    nframes = (end - start + 1) * NUM_AVER * (SAMPLES_PER_FRAME_CHROMA / HOP_SIZE_CHROMA);
+    fe_clip.get_CENS(reader_clip, nframes, data_cens);
     
     if (all_temp_cens.size() != 0) {
-        for (int i = 0; i < nclusters; i++) {
-            vector<float> dists;
-            int exchange = dist_CENS(data_cens, all_temp_cens[i], dists);
-            exchanges.push_back(exchange);
-            
-            pos = min_element(dists.begin(), dists.end());
-            min_dist.push_back(*pos);
-        }
-        
-        int index;
-        float min_best = vector_min(min_dist, &index);
-        if (min_best <= MATCHING_THRESHOLD) {
-            // cluster them together
-            if (exchanges[index]) {
-                // replace the template with this new one
-                write_to_atc(data_cens, index); 
-                clip.is_centroid = true;
-            }  else {
-                clip.is_centroid = false;
-            }
-            clip.set_cluster_id(index);
-        } else {
-            // make it a new cluster
-            nclusters++;
-            write_to_atc(data_cens, nclusters);
-            clip.set_cluster_id(index);
-            clip.is_centroid = true;
-        }
+        compare_and_cluster(clip, data_cens, min_dist);
     } else {
         if (nclusters == 0) {
             nclusters++;        
             write_to_atc(data_cens, nclusters-1);
-            clip.is_centroid = true;
-            clip.set_cluster_id(nclusters - 1);
-        } else {
-            for (int i = 0; i < nclusters; i++) {
-                vector<float> dists;
-                int exchange = dist_CENS(data_cens, all_temp_cens[i], dists);
-                exchanges.push_back(exchange);
-                
-                pos = min_element(dists.begin(), dists.end());
-                min_dist.push_back(*pos);
-            }
+            clip->is_centroid = true;
+            clip->set_cluster_id(nclusters - 1);
             
-            int index;
-            float min_best = vector_min(min_dist, &index);
-            if (min_best <= MATCHING_THRESHOLD) {
-                // cluster them together
-                if (exchanges[index]) {
-                    // replace the template with this new one
-                    write_to_atc(data_cens, index); 
-                    clip.is_centroid = true;
-                }  else {
-                    clip.is_centroid = false;
-                }
-                clip.set_cluster_id(index);
-            } else {
-                // make it a new cluster
-                nclusters++;
-                write_to_atc(data_cens, nclusters);
-                clip.set_cluster_id(index);
-                clip.is_centroid = true;
-            }
-                    
+            all_temp_cens.push_back(data_cens);
+        } else {
+            compare_and_cluster(clip, data_cens, min_dist);                    
         }
-        
-    }
-    
-    for (int i = 0; i < data_cens.size(); i++) {
-        free(data_cens[i]);
     }
 }
 
-void Clip_cluster::write_to_atc(vector<float*> data_cens, int cluster_id) {
+void Clip_cluster::compare_and_cluster(Audio_clip *clip, vector<float*> &data_cens, vector<float> &min_dist) {
+    int i, index;
+    float m_dist, min_best;    
+    vector<int> exchanges;
+    
+    for (i = 0; i < nclusters; i++) {
+        vector<float> dists;
+        int exchange = dist_CENS(data_cens, all_temp_cens[i], dists);
+
+#ifdef DEBUG
+        for (int j = 0; j < dists.size(); j++) {
+            cout << dists[j] << " ";
+        }
+        cout << endl;
+#endif
+        
+        exchanges.push_back(exchange);
+        
+        int dummy;
+        m_dist = vector_min(dists, &dummy);
+        min_dist[i] = m_dist;
+    }
+    
+    min_best = vector_min(min_dist, &index);
+#ifdef DEBUG
+    cout << "Best match distance: " << min_best << " with cluster " << index << endl;
+#endif
+    if (min_best <= MATCHING_THRESHOLD) {
+        // cluster them together
+        if (exchanges[index]) {
+            // replace the template with this new one
+            write_to_atc(data_cens, index); 
+            clip->is_centroid = true;
+            all_temp_cens[index] = data_cens;
+        }  else {
+            clip->is_centroid = false;
+        }
+        clip->set_cluster_id(index);
+    } else {
+        // make it a new cluster
+        nclusters++;
+        write_to_atc(data_cens, nclusters - 1);
+        clip->set_cluster_id(nclusters - 1);
+        clip->is_centroid = true;
+    }
+}    
+
+void Clip_cluster::write_to_atc(vector<float*> &data_cens, int cluster_id) {
     ofstream atc_write;
     stringstream ss;
     string path = "./CENS_cent/" + int2str(cluster_id);
@@ -154,10 +147,10 @@ void Clip_cluster::write_to_atc(vector<float*> data_cens, int cluster_id) {
     ss.seekp(pos);
     
     for (int i = 0; i < data_cens.size(); i++) {
-        for (int j = 0; j < CHROMA_BIN_COUNT + 1; j++) {
+        for (int j = 0; j < CHROMA_BIN_COUNT; j++) {
             
             ss << data_cens[i][j];
-            if (j != CHROMA_BIN_COUNT) {
+            if (j != CHROMA_BIN_COUNT - 1) {
                 ss << " ";
             }
         }
@@ -174,17 +167,17 @@ void Clip_cluster::write_to_atc(vector<float*> data_cens, int cluster_id) {
 /*
  * return 0 indicates that query is longer than the template
  */
-int Clip_cluster::dist_CENS(vector<float*>  query_cens, vector<float*> template_cens, vector<float> dists) {
+int Clip_cluster::dist_CENS(vector<float*>  &query_cens, vector<float*> &template_cens, vector<float> &dists) {
     if (query_cens.size() > template_cens.size()) {
         dist_CENS(template_cens, query_cens, dists);
-        return 0;
+        return 1;
     }
     
     int i, j, k, len_q = query_cens.size(), len_t = template_cens.size();
     float dot_prod, sum;
     for (i = 0; i < len_t - len_q + 1; i++) {
         sum = 0;
-	    for (j = 0; j < CHROMA_BIN_COUNT + 1 ; j++) {
+	    for (j = 0; j < CHROMA_BIN_COUNT; j++) {
             dot_prod = 0;
 	        for (k = 0; k < len_q; k++) {
                 dot_prod += query_cens[k][j] * template_cens[k + i][j];
@@ -193,7 +186,7 @@ int Clip_cluster::dist_CENS(vector<float*>  query_cens, vector<float*> template_
 	    }
         dists.push_back(1 - sum/len_q);
     }
-    return 1;
+    return 0;
 }
 
 int Clip_cluster::load_all_temp_cens() {
@@ -246,8 +239,8 @@ vector<float*> Clip_cluster::read_temp(string filename) {
     vector<vector<float> > raw = read_matfile(path.c_str());
     int count = raw.size();
     for (int i = 0; i < count; i++) {
-        float* tmp = ALLOC(float, CHROMA_BIN_COUNT + 1);
-        for (int j = 0; j < CHROMA_BIN_COUNT + 1; j++) {
+        float* tmp = ALLOC(float, CHROMA_BIN_COUNT);
+        for (int j = 0; j < CHROMA_BIN_COUNT; j++) {
             tmp[j] = raw[i][j];
         }
         cens.push_back(tmp);

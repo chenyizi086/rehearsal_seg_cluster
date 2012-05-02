@@ -10,12 +10,11 @@ bool is_midi_file(char *filename);
 
 // index into matrix to extract chroma vector
 #define AREF1(chrom_energy, row) \
-((chrom_energy) + (row) * (CHROMA_BIN_COUNT + 1))
+((chrom_energy) + (row) * CHROMA_BIN_COUNT)
 
 // index into matrix to extract element of chroma vector
 #define AREF2(chrom_energy, row, column) AREF1(chrom_energy, row)[column]
 
-//FILE *dbf = NULL;
 
 class Audio_reader;
 
@@ -29,7 +28,8 @@ public:
      * the spectrum is stored in a vector of float number
      */
     int get_spectrum(Audio_reader &reader, vector<float> &data_spec, bool verbose);
-    int get_CENS(Audio_reader &reader, long nframes, vector<vector<float> > &data_out);
+    int get_CENS(Audio_reader &reader, long nframes, vector<float*> &data_out);
+    
     void set_parameters(double _frame_period, double _window_size){
         frame_period = _frame_period;
         window_size = _window_size;
@@ -43,6 +43,8 @@ private:
     void gen_Hamming(float *h, int n);
     void gen_Hanning(float *h, int n);
     void gen_Magnitude(float* inR, float* inI, int num_bin, float* out);
+    
+    void norm_l2(float *chroma_vec);
     
     double frame_period;		// frame size in seconds
     double window_size;		// window size in seconds

@@ -51,17 +51,18 @@ string int2str(int a) {
     return ss.str();
 }
 
-float vector_min(vector<float> min_dist, int *index) {
-    float v = min_dist[0];
+float vector_min(vector<float> vec, int *index) {
+    float v = vec[0];
     *index = 0;
-    for (int i = 1; i < min_dist.size(); i++) {
-        if (min_dist[i] < v) {
-            v = min_dist[i];
+    for (int i = 1; i < vec.size(); i++) {
+        if (vec[i] < v) {
+            v = vec[i];
             *index = i;
         }
     }
     return v;
 }
+
 
 
 

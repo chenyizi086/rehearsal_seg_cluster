@@ -11,6 +11,8 @@ void HMM_smoother::do_smooth(vector<float> ada_raw_result, vector<int> &result_w
     
 #ifdef DEBUG
     printf("============= START HMM SMOOTHING=============\n");
+    
+    printf("The length of the total segments: %d\n", (int)ada_raw_result.size());
 #endif
     
 	vector<float> viterbi_m, viterbi_n;
@@ -31,18 +33,22 @@ void HMM_smoother::do_smooth(vector<float> ada_raw_result, vector<int> &result_w
 void HMM_smoother::compute_viterbi(vector<float> &viterbi_m, vector<float> &viterbi_n, vector<int> &path_m, vector<int> &path_n, int n_lframe, vector<float> ada_raw_result) {
     float max_m, max_n;
 	int ind_m, ind_n;
-
+    
 	for (int i = 1 ; i < n_lframe; i++) {
 
 		// computer viterbi
-		max_m = MAX(viterbi_m[i-1] + log(pm_m), viterbi_m[i-1] + log(pm_n));
-		ind_m = viterbi_m[i-1] + log(pm_m) > viterbi_m[i-1] + log(pm_n) ? 0:1; 
+        //float tmp1 = viterbi_m[i-1] + log(pm_m);
+        //float tmp2 = viterbi_n[i-1] + log(pn_m);
+		max_m = MAX(viterbi_m[i-1] + log(pm_m), viterbi_n[i-1] + log(pn_m));
+		ind_m = (viterbi_m[i-1] + log(pm_m)) > (viterbi_n[i-1] + log(pn_m)) ? 0:1; 
 		
-		max_n = MAX(viterbi_n[i-1] + log(pn_m), viterbi_n[i-1] + log(pn_n));
-		ind_n = viterbi_n[i-1] + log(pn_m) > viterbi_n[i-1] + log(pn_n) ? 0:1;
+        //float tmp3 = viterbi_m[i-1] + log(pm_n);
+        //float tmp4 = viterbi_n[i-1] + log(pn_n);
+		max_n = MAX(viterbi_m[i-1] + log(pm_n), viterbi_n[i-1] + log(pn_n));
+		ind_n = (viterbi_m[i-1] + log(pm_n)) > (viterbi_n[i-1] + log(pn_n)) ? 0:1;
 
-		viterbi_m[i-1] = logistic(ada_raw_result[i], 1) + max_m;
-		viterbi_n[i-1] = logistic(ada_raw_result[i], 0) + max_n;
+		viterbi_m.push_back(logistic(ada_raw_result[i], 1) + max_m);
+		viterbi_n.push_back(logistic(ada_raw_result[i], 0) + max_n);
 
 		path_m.push_back(ind_m);
 		path_n.push_back(ind_n);
@@ -53,7 +59,7 @@ void HMM_smoother::compute_viterbi(vector<float> &viterbi_m, vector<float> &vite
 void HMM_smoother::viterbi_decode(vector<int> &result_with_smooth, vector<int> path_m, vector<int> path_n, int ind, int n_lframe) {
     // trace back
 	result_with_smooth.push_back(ind2label(ind));
-	for (int i = n_lframe - 1; i >= 0; i--) {
+	for (int i = n_lframe - 2; i >= 1; i--) {
 		if (ind == 0) {
 			result_with_smooth.push_back(ind2label(path_m[i]));
 			ind = path_m[i];

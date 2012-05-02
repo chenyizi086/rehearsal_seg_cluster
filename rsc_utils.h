@@ -15,6 +15,6 @@ const char* const bool_to_string(bool b);
 vector<vector<float> > read_matfile(const char* filename);
 int nextPowerOf2(int n);
 string int2str(int a);
-float vector_min(vector<float> min_dist, int *index);
+float vector_min(vector<float> vec, int *index);
 
 #endif

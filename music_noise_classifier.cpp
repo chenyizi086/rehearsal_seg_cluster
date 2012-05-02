@@ -16,6 +16,14 @@ HMM_smoother hmms;
 
 bool MNC_DEBUG_FLAG = false;
 
+Music_noise_classifier::~Music_noise_classifier() {
+    int count = all_clips.size();
+    for (int i = 0; i < count; i++) {
+        delete(all_clips[i]);
+    }
+    
+}
+
 void Music_noise_classifier::load_adaboost_paras(const char* f_ada, const char* f_em) {
 #ifdef DEBUG
     cout << "Loading AdaBoost parameters..." << endl;
@@ -24,7 +32,7 @@ void Music_noise_classifier::load_adaboost_paras(const char* f_ada, const char* 
 	ada.load_eigenmusic_inv(f_em);
 }
 
-void Music_noise_classifier::do_music_noise_classify(const char *filename, const char* f_ada, const char* f_em, vector<Audio_clip> &clips) {
+void Music_noise_classifier::do_music_noise_classify(const char *filename, const char* f_ada, const char* f_em, vector<Audio_clip *> &clips) {
 	vector<int> pred_result, result_no_smooth, result_with_smooth;
 	vector<float> ada_raw_result;
     
@@ -96,23 +104,30 @@ void Music_noise_classifier::do_adaboost(const char *filename, vector<int> &pred
 	}
 }
 
-void Music_noise_classifier::do_gen_clips(const char* filename, vector<int> result_with_smooth, vector<Audio_clip> &clips) {
+void Music_noise_classifier::do_gen_clips(const char* filename, vector<int> result_with_smooth, vector<Audio_clip *> &clips) {
 	bool new_clip_flag = true;
 	int cur;
-	for (int i = 0; i < result_with_smooth.size(); ) {
-        Audio_clip clip(filename);
+    Audio_clip *clip;
+    int count = result_with_smooth.size();
+	for (int i = 0; i < count; ) {
+        //Audio_clip clip(filename);
 		if (new_clip_flag) {
-			clip.set_start(i);
-			clip.is_music = (result_with_smooth[i] == 1);
+            clip = new Audio_clip(filename);
+			clip->set_start(i);
+			clip->is_music = (result_with_smooth[i] == 1);
 			cur = result_with_smooth[i];
 			i++;
 			new_clip_flag = false;
 			continue;
 		}
-		if (result_with_smooth[i] != cur) {
-			clip.set_end(i-1);
-			if (clip.is_music && clip.get_end() - clip.get_start() >= int(MIN_LENGTH_SECS / (NUM_AVER * SAMPLES_PER_FRAME / RESAMPLE_FREQ) + 0.5)) {
+        
+		if (result_with_smooth[i] != cur || i == count - 1) {
+            int offset = (int)(i == count - 1);
+			clip->set_end(i-1 + offset);
+            
+			if (clip->is_music && clip->get_end() - clip->get_start() >= int(MIN_LENGTH_SECS / (NUM_AVER * SAMPLES_PER_FRAME / RESAMPLE_FREQ) + 0.5)) {
 				clips.push_back(clip);
+                all_clips.push_back(clip);
 			}
 			new_clip_flag = true;
 			continue;
