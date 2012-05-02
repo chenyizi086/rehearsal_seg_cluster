@@ -181,6 +181,7 @@ void Clip_cluster::do_clip_cluster(Audio_clip *clip) {
             write_to_atc(data_cens, nclusters-1);
             clip->is_centroid = true;
             clip->set_cluster_id(nclusters - 1);
+            write_to_cent_info(clip);
             
             all_temp_cens.push_back(data_cens);
         } else {
@@ -216,12 +217,13 @@ void Clip_cluster::compare_and_cluster(Audio_clip *clip, vector<float*> &data_ce
             write_to_atc(data_cens, index); 
             all_temp_cens[index] = data_cens;
             clip->is_centroid = true;
-            
+            clip->set_cluster_id(index);
+            write_to_cent_info(clip);
             all_temp_cens[index] = data_cens;
         }  else {
             clip->is_centroid = false;
+            clip->set_cluster_id(index);
         }
-        clip->set_cluster_id(index);
     } else {
         // make it a new cluster
         nclusters++;
@@ -230,6 +232,7 @@ void Clip_cluster::compare_and_cluster(Audio_clip *clip, vector<float*> &data_ce
         clip->is_centroid = true;
         
         all_temp_cens.push_back(data_cens); 
+        write_to_cent_info(clip);
     }
 }    
 
@@ -360,6 +363,25 @@ vector<float*> Clip_cluster::read_temp(string filename) {
     }
     return cens;
 }
+
+void Clip_cluster::write_to_cent_info(Audio_clip *clip) {
+    if (clip -> get_cluster_id() == 0) {
+        cout << "stop" << endl;
+    }
+    ofstream centinfo_write;
+    string path;
+    stringstream ss;
+
+    path = "./CENS_centinfo/" +int2str(clip->get_cluster_id());
+    centinfo_write.open(path.c_str(), ios_base::trunc);
+    ss << *clip << endl;
+    string out = ss.str();
+    centinfo_write.write(out.c_str(), out.size());
+    centinfo_write.close();
+}
+    
+    
+    
 
 
 

@@ -20,6 +20,7 @@ private:
     int dist_CENS(vector<float*>  &query_cens, vector<float*> &template_cens, vector<float> &dists);
     void write_to_atc(vector<float*> &data_cens, int cluster_id);
     void write_to_db(Audio_clip *clip);
+    void write_to_cent_info(Audio_clip *clip);
     int get_nclusters(vector<string> &files);
     int load_all_temp_cens();
     vector<vector<float*> > all_temp_cens;
