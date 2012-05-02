@@ -16,6 +16,10 @@ HMM_smoother hmms;
 
 bool MNC_DEBUG_FLAG = false;
 
+Music_noise_classifier::Music_noise_classifier(const char* f_ada, const char* f_em) {
+    load_adaboost_paras(f_ada, f_em);
+}
+
 Music_noise_classifier::~Music_noise_classifier() {
     int count = all_clips.size();
     for (int i = 0; i < count; i++) {
@@ -32,12 +36,10 @@ void Music_noise_classifier::load_adaboost_paras(const char* f_ada, const char* 
 	ada.load_eigenmusic_inv(f_em);
 }
 
-void Music_noise_classifier::do_music_noise_classify(const char *filename, const char* f_ada, const char* f_em, vector<Audio_clip *> &clips) {
+void Music_noise_classifier::do_music_noise_classify(const char *filename, vector<Audio_clip *> &clips) {
 	vector<int> pred_result, result_no_smooth, result_with_smooth;
 	vector<float> ada_raw_result;
     
-    load_adaboost_paras(f_ada, f_em);
-
 	do_adaboost(filename, pred_result, ada_raw_result);
 
 	hmms.do_smooth(ada_raw_result, result_with_smooth);
@@ -52,14 +54,13 @@ void Music_noise_classifier::do_adaboost(const char *filename, vector<int> &pred
 	float ada_raw;
 	//no overlapping
 	fe_mnc.set_parameters(SAMPLES_PER_FRAME / RESAMPLE_FREQ, SAMPLES_PER_FRAME / RESAMPLE_FREQ);
-	/*
-     *****************************FOR SIMPLICITY**************************
-     
+	
     reader.open(filename, fe_mnc, RESAMPLE_FREQ, MNC_DEBUG_FLAG);
-    */
     
+    /*
     string t = "resample_" + string(filename);
     reader.open(t.c_str(), fe_mnc, 0, MNC_DEBUG_FLAG);
+     */
     
     //init aver_spec
     aver_spec.assign(SAMPLES_PER_FRAME / 2 + 1, 0);

@@ -62,6 +62,18 @@ void Clip_cluster::do_cluster(vector<Audio_clip *> &clips) {
 #endif
 }
 
+
+void Clip_cluster::write_to_db(vector<Audio_clip *> &clips) {
+    stringstream ss;
+    db_write.open("databases.txt", ios_base::app);
+    for( int i = 0; i < clips.size(); i++) {
+        ss << *clips[i] << endl;
+    }
+    string out = ss.str();
+    db_write.write(out.c_str(), out.size());
+}
+
+
 void Clip_cluster::do_clip_cluster(Audio_clip *clip) {
     char *atc_readname;
     string atc_rsample_name;
@@ -157,7 +169,6 @@ void Clip_cluster::compare_and_cluster(Audio_clip *clip, vector<float*> &data_ce
 }    
 
 void Clip_cluster::write_to_atc(vector<float*> &data_cens, int cluster_id) {
-    ofstream atc_write;
     stringstream ss;
     string path = "./CENS_cent/" + int2str(cluster_id);
     atc_write.open(path.c_str(), ios_base::trunc);
@@ -192,11 +203,9 @@ int Clip_cluster::dist_CENS(vector<float*>  &query_cens, vector<float*> &templat
         return 1;
     }
     
-    int i, j, k, len_q, len_t = template_cens.size();
-    int begin, end, length;
+    int i, j, k, begin, end, length, len_q, len_t = template_cens.size();
     float dot_prod, sum;
     
-
     // only the middle SEGMENT_LENGTH long frames (1.024 sec) are used for compare
     length = query_cens.size();
     if (length <= SEGMENT_LENGTH) {
@@ -214,8 +223,6 @@ int Clip_cluster::dist_CENS(vector<float*>  &query_cens, vector<float*> &templat
     }
     len_q = end - begin;
     
-    //begin = 0;
-    //len_q = query_cens.size()
     for (i = 0; i < len_t - len_q + 1; i++) {
         sum = 0;
 	    for (j = 0; j < CHROMA_BIN_COUNT; j++) {

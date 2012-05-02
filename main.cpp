@@ -6,7 +6,7 @@
 Feature_extractor fe;
 
 int main (int argc, char * const argv[]) {
-    Music_noise_classifier classifier;
+    Music_noise_classifier classifier("./params/music_noise_classifier_energynorm_30.txt", "./params/eigen_music_inv_energynorm.txt");
     Clip_cluster cluster;
     
     
@@ -19,7 +19,7 @@ int main (int argc, char * const argv[]) {
     for (int i = 1; i < argc; i++) { 
         cout << argv[i] << endl;
         vector<Audio_clip *> clips;
-        classifier.do_music_noise_classify(argv[i], "./params/music_noise_classifier_energynorm_30.txt", "./params/eigen_music_inv_energynorm.txt", clips);
+        classifier.do_music_noise_classify(argv[i], clips);
         cluster.do_cluster(clips);
     }
     return 0;

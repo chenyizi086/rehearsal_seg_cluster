@@ -109,7 +109,7 @@ string Audio_file_reader::resample(int new_sample_rate) {
     
 	src_ratio = (1.0 * new_sample_rate) / samplerate;	
     sf_info.samplerate = new_sample_rate ;
-
+    
     
 	if (fabs (src_ratio - 1.0) < 1e-20)
 	{	
@@ -136,24 +136,22 @@ string Audio_file_reader::resample(int new_sample_rate) {
 	printf ("Sample Rate   : %d\n", sf_info.samplerate) ;
 #endif
     
-	do
-	{
-        if (sf_rs != NULL) {
-            sf_close (sf_rs);
-        }
-        if ((sf_rs = sf_open(rname.c_str(), SFM_WRITE, &sf_info)) == NULL) {	
-            printf ("Error : Not able to open output file '%s'\n", rname.c_str());
-            sf_close (sf);   
-            return "";
-        };
-        /* Update the file header after every write. */
-        sf_command (sf_rs, SFC_SET_UPDATE_HEADER_AUTO, NULL, SF_TRUE);
-        
-		sf_command (sf_rs, SFC_SET_CLIPPING, NULL, SF_TRUE) ;
-        
-		count = sample_rate_convert (sf_rs, converter, src_ratio, sf_info.channels, &gain) ;
+	
+    if (sf_rs != NULL) {
+        sf_close (sf_rs);
     }
-	while (count < 0) ;
+    if ((sf_rs = sf_open(rname.c_str(), SFM_WRITE, &sf_info)) == NULL) {	
+        printf ("Error : Not able to open output file '%s'\n", rname.c_str());
+        sf_close (sf);   
+        return "";
+    };
+    /* Update the file header after every write. */
+    sf_command (sf_rs, SFC_SET_UPDATE_HEADER_AUTO, NULL, SF_TRUE);
+    
+    sf_command (sf_rs, SFC_SET_CLIPPING, NULL, SF_FALSE) ;
+    
+    sample_rate_convert (sf_rs, converter, src_ratio, sf_info.channels, &gain) ;
+    
     
     sf_close(sf_rs);
     
@@ -162,20 +160,15 @@ string Audio_file_reader::resample(int new_sample_rate) {
 	printf ("Output Frames : %ld\n\n", (long) count) ;
 #endif
 	return rname;
-} /* main */
-
-/*==============================================================================
- */
+} 
 
 sf_count_t Audio_file_reader::sample_rate_convert (SNDFILE *sf_rs, int converter, double src_ratio, int channels, double * gain) {	
-	double apply_gain (float *, long , int , double , double); 
 	static float input [BUFFER_LEN] ;
 	static float output [BUFFER_LEN] ;
     
 	SRC_STATE	*src_state ;
 	SRC_DATA	src_data ;
 	int			error ;
-	double		max = 0.0 ;
 	sf_count_t	output_count = 0 ;
     
 	sf_seek (sf, 0, SEEK_SET) ;
@@ -221,8 +214,6 @@ sf_count_t Audio_file_reader::sample_rate_convert (SNDFILE *sf_rs, int converter
 		if (src_data.end_of_input && src_data.output_frames_gen == 0)
 			break ;
         
-		max = apply_gain (src_data.data_out, src_data.output_frames_gen, channels, max, *gain) ;
-        
 		/* Write output. */
 		sf_writef_float (sf_rs, output, src_data.output_frames_gen) ;
 		output_count += src_data.output_frames_gen ;
@@ -233,29 +224,8 @@ sf_count_t Audio_file_reader::sample_rate_convert (SNDFILE *sf_rs, int converter
     
 	src_state = src_delete (src_state) ;
     
-	if (max > 1.0)
-	{	
-		*gain = 1.0 / max ;
-		printf ("\nOutput has clipped. Restarting conversion to prevent clipping.\n\n") ;
-		return -1 ;
-    } ;
-    
 	return output_count ;
 } /* sample_rate_convert */
-
-double apply_gain (float * data, long frames, int channels, double max, double gain)
-{
-	long k ;
-    
-	for (k = 0 ; k < frames * channels ; k++)
-	{	data [k] *= gain ;
-        
-		if (fabs (data [k]) > max)
-			max = fabs (data [k]) ;
-    } ;
-    
-	return max ;
-} /* apply_gain */
 
 void Audio_file_reader::close()
 {
