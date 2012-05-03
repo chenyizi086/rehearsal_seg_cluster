@@ -23,6 +23,7 @@
 		9FFBEFED154F0F380036367D /* libsamplerate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FFBEFE7154F0F380036367D /* libsamplerate.a */; };
 		9FFBEFEE154F0F390036367D /* libsndfile.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FFBEFE9154F0F380036367D /* libsndfile.1.dylib */; };
 		9FFBEFEF154F0F390036367D /* libsndfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FFBEFEA154F0F380036367D /* libsndfile.a */; };
+		9FFD24CD155197680075CAE5 /* gen_chroma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FFD24CC155197680075CAE5 /* gen_chroma.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -68,6 +69,7 @@
 		9FFBEFE9154F0F380036367D /* libsndfile.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libsndfile.1.dylib; sourceTree = "<group>"; };
 		9FFBEFEA154F0F380036367D /* libsndfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsndfile.a; sourceTree = "<group>"; };
 		9FFBEFEB154F0F380036367D /* libsndfile.la */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = libsndfile.la; sourceTree = "<group>"; };
+		9FFD24CC155197680075CAE5 /* gen_chroma.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gen_chroma.cpp; sourceTree = "<group>"; };
 		C6859E8B029090EE04C91782 /* rehearsal-seg-cluster.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = "rehearsal-seg-cluster.1"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -168,6 +170,7 @@
 			children = (
 				9F75C3D8154E802300A7CA44 /* feature_extractor.cpp */,
 				9F75C3D9154E802300A7CA44 /* feature_extractor.h */,
+				9FFD24CC155197680075CAE5 /* gen_chroma.cpp */,
 			);
 			name = "Features Extraction";
 			sourceTree = "<group>";
@@ -264,6 +267,7 @@
 				9F79B8FB14D1505D001C8680 /* music_noise_classifier.cpp in Sources */,
 				9F79B91D14D15128001C8680 /* hmm_smoother.cpp in Sources */,
 				9F75C73F154EE64A00A7CA44 /* clip_cluster.cpp in Sources */,
+				9FFD24CD155197680075CAE5 /* gen_chroma.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
