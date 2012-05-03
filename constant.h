@@ -73,7 +73,7 @@ const float MIN_LENGTH_SECS = 5.0; //secs
 
 
 const float MATCHING_THRESHOLD = 0.15;
-const int SEGMENT_LENGTH = 40;
+const int SEGMENT_LENGTH = 60;
 
 #endif
 
