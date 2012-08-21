@@ -11,6 +11,10 @@
 #include "samplerate.h"
 #include "audioreader.h"
 #include "audiofilereader.h"
+#include "constant.h"
+
+#include <ctime>
+#include <iostream>
 
 #ifdef WIN32
 #include <malloc.h>
@@ -18,7 +22,6 @@
 #define alloca _alloca
 #endif
 
-#define DEBUG
 #define DEFAULT_CONVERTER SRC_SINC_MEDIUM_QUALITY
 #define BUFFER_LEN 1024 
 
@@ -58,6 +61,9 @@ long Audio_file_reader::read(float *data, long n)
 
 bool Audio_file_reader::open(const char *filename, Feature_extractor &fe, int start_frame, int rsamplerate, bool verbose)
 {
+    clock_t start, end;
+    
+    
     bytes_per_frame = 0; // initialize now in case an error occurs
     name[0] = 0;
     bzero(&sf_info, sizeof(sf_info));
@@ -68,7 +74,14 @@ bool Audio_file_reader::open(const char *filename, Feature_extractor &fe, int st
     name[MAX_NAME_LEN] = 0; // just in case
     
     if (rsamplerate != 0) {
+        
+        start = clock();
         string rname = resample(rsamplerate);
+        end = clock();
+        cout << "Running Time for resample : " << (double) (end - start) / CLOCKS_PER_SEC << endl;
+
+        
+        
         if (rname == "") {
             return false;
         }
@@ -150,7 +163,7 @@ string Audio_file_reader::resample(int new_sample_rate) {
     
     sf_command (sf_rs, SFC_SET_CLIPPING, NULL, SF_TRUE) ;
     
-    sample_rate_convert (sf_rs, converter, src_ratio, sf_info.channels, &gain) ;
+    count = sample_rate_convert (sf_rs, converter, src_ratio, sf_info.channels, &gain) ;
     
     sf_close(sf_rs);
     

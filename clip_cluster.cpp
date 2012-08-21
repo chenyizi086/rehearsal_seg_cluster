@@ -1,15 +1,18 @@
-#include "clip_cluster.h"
-#include "feature_extractor.h"
-#include <string>
-#include "rsc_utils.h"
-#include "sys/types.h"
-#include "dirent.h"
-#include "assert.h"
-#include <algorithm>
 #include "audio_clip.h"
 #include "audiofilereader.h"
+#include "clip_cluster.h"
 #include "constant.h"
+#include "feature_extractor.h"
+#include "rsc_utils.h"
+
+#include "assert.h"
+#include "dirent.h"
+#include "sys/types.h"
+
+#include <algorithm>
 #include <sstream>
+#include <string>
+
 
 #ifdef DEBUG
 #include <iostream>
@@ -87,6 +90,28 @@ void Clip_cluster::load_database() {
     db_read.close();
 }
 
+/*
+string Clip_cluster::get_cluster_clips(string clip) {
+    ifstream cens_info_read;
+    string line, result = "";
+    stringstream ss;
+    for (int i = 0; i < nclusters; i++) {
+        string path = "./CENS_centinfo/" + int2str(i);
+        cens_info_read.open(path.c_str());
+        getline(cens_info_read, line);
+        if (line == clip) {
+            for (int j = 0; j < db[i].size(); j++) {
+                Audio_clip *tmp = db[i][j];
+                ss >> *tmp >> endl;
+            }
+            result = ss.str();
+            break;
+        }
+    }
+    return result;
+}
+ */
+
 void Clip_cluster::do_cluster(vector<Audio_clip *> &clips) {
     int i, j;
     map<int, vector<Audio_clip *> >::iterator it;
@@ -158,6 +183,8 @@ void Clip_cluster::do_clip_cluster(Audio_clip *clip) {
     vector<float*> data_cens;
     vector<float> min_dist;
     
+    clock_t start_t, end_t;
+    
     Audio_file_reader reader_clip;
     
     atc_readname = clip->get_filename();
@@ -171,7 +198,13 @@ void Clip_cluster::do_clip_cluster(Audio_clip *clip) {
     reader_clip.open(atc_rsample_name.c_str(), fe_clip, start * SAMPLES_PER_FRAME * NUM_AVER, 0, CLUSTER_DEBUG_FLAG);
     
     nframes = (end - start + 1) * NUM_AVER * (SAMPLES_PER_FRAME_CHROMA / HOP_SIZE_CHROMA);
+    
+    start_t = clock();
     fe_clip.get_CENS(reader_clip, nframes, data_cens);
+    end_t = clock();
+    cout << "Running Time for CENS : " << (double) (end_t - start_t) / CLOCKS_PER_SEC << endl;
+
+    start_t = clock();
     
     if (all_temp_cens.size() != 0) {
         compare_and_cluster(clip, data_cens, min_dist);
@@ -188,6 +221,10 @@ void Clip_cluster::do_clip_cluster(Audio_clip *clip) {
             compare_and_cluster(clip, data_cens, min_dist);                    
         }
     }
+    
+    end_t = clock();
+    cout << "Running Time for matching and clustering : " << (double) (end_t - start_t) / CLOCKS_PER_SEC << endl;
+
 }
 
 void Clip_cluster::compare_and_cluster(Audio_clip *clip, vector<float*> &data_cens, vector<float> &min_dist) {
@@ -365,9 +402,6 @@ vector<float*> Clip_cluster::read_temp(string filename) {
 }
 
 void Clip_cluster::write_to_cent_info(Audio_clip *clip) {
-    if (clip -> get_cluster_id() == 0) {
-        cout << "stop" << endl;
-    }
     ofstream centinfo_write;
     string path;
     stringstream ss;

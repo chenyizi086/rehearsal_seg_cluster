@@ -1,15 +1,8 @@
-/*
- *  sautils.cpp
- *  scorealign
- *
- *  Created by Roger Dannenberg on 10/20/07.
- *  Copyright 2007 __MyCompanyName__. All rights reserved.
- *
- */
+#include "rsc_utils.h"
+
 #include <fstream>;
 #include <iostream>;
 #include <sstream>;
-#include "rsc_utils.h"
 #include <string>
 
 

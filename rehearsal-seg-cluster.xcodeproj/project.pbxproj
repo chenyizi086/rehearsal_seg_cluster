@@ -14,6 +14,12 @@
 		9F79B91D14D15128001C8680 /* hmm_smoother.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F79B91C14D15128001C8680 /* hmm_smoother.cpp */; };
 		9FA869371497FEF400675AB9 /* rsc_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FA869361497FEF400675AB9 /* rsc_utils.cpp */; };
 		9FA869BE14981AEC00675AB9 /* FFT3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FA869BC14981AEC00675AB9 /* FFT3.cpp */; };
+		9FE18AB1155261A200701E82 /* libportaudio.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FE18AAA155261A200701E82 /* libportaudio.2.dylib */; };
+		9FE18AB2155261A200701E82 /* libportaudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FE18AAB155261A200701E82 /* libportaudio.a */; };
+		9FE18AB3155261A200701E82 /* libzmq.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FE18AAD155261A200701E82 /* libzmq.1.dylib */; };
+		9FE18AB4155261A200701E82 /* libzmq.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FE18AAE155261A200701E82 /* libzmq.a */; };
+		9FE18AB5155261A200701E82 /* libzmq.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FE18AAF155261A200701E82 /* libzmq.dylib */; };
+		9FE18ACD155262D400701E82 /* audio_player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FE18ACB155262D400701E82 /* audio_player.cpp */; };
 		9FFBEFC9154F0DAD0036367D /* audio_clip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F75C3CF154E802300A7CA44 /* audio_clip.cpp */; };
 		9FFBEFDB154F0DDE0036367D /* feature_extractor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F75C3D8154E802300A7CA44 /* feature_extractor.cpp */; };
 		9FFBEFDC154F0DDE0036367D /* audiofilereader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F75C3D1154E802300A7CA44 /* audiofilereader.cpp */; };
@@ -62,6 +68,15 @@
 		9FA8693B1497FF2300675AB9 /* rsc_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rsc_utils.h; sourceTree = "<group>"; };
 		9FA869BC14981AEC00675AB9 /* FFT3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FFT3.cpp; path = fft3/FFT3.cpp; sourceTree = "<group>"; };
 		9FA869BD14981AEC00675AB9 /* FFT3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FFT3.h; path = fft3/FFT3.h; sourceTree = "<group>"; };
+		9FE18AAA155261A200701E82 /* libportaudio.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libportaudio.2.dylib; sourceTree = "<group>"; };
+		9FE18AAB155261A200701E82 /* libportaudio.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libportaudio.a; sourceTree = "<group>"; };
+		9FE18AAC155261A200701E82 /* libportaudio.la */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = libportaudio.la; sourceTree = "<group>"; };
+		9FE18AAD155261A200701E82 /* libzmq.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libzmq.1.dylib; sourceTree = "<group>"; };
+		9FE18AAE155261A200701E82 /* libzmq.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libzmq.a; sourceTree = "<group>"; };
+		9FE18AAF155261A200701E82 /* libzmq.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libzmq.dylib; sourceTree = "<group>"; };
+		9FE18AB0155261A200701E82 /* libzmq.la */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = libzmq.la; sourceTree = "<group>"; };
+		9FE18ACB155262D400701E82 /* audio_player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = audio_player.cpp; sourceTree = "<group>"; };
+		9FE18ACC155262D400701E82 /* audio_player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = audio_player.h; sourceTree = "<group>"; };
 		9FFBEFE6154F0F380036367D /* libsamplerate.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libsamplerate.0.dylib; sourceTree = "<group>"; };
 		9FFBEFE7154F0F380036367D /* libsamplerate.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsamplerate.a; sourceTree = "<group>"; };
 		9FFBEFE8154F0F380036367D /* libsamplerate.la */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = libsamplerate.la; sourceTree = "<group>"; };
@@ -80,6 +95,11 @@
 				9FFBEFED154F0F380036367D /* libsamplerate.a in Frameworks */,
 				9FFBEFEE154F0F390036367D /* libsndfile.1.dylib in Frameworks */,
 				9FFBEFEF154F0F390036367D /* libsndfile.a in Frameworks */,
+				9FE18AB1155261A200701E82 /* libportaudio.2.dylib in Frameworks */,
+				9FE18AB2155261A200701E82 /* libportaudio.a in Frameworks */,
+				9FE18AB3155261A200701E82 /* libzmq.1.dylib in Frameworks */,
+				9FE18AB4155261A200701E82 /* libzmq.a in Frameworks */,
+				9FE18AB5155261A200701E82 /* libzmq.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,6 +109,13 @@
 		08FB7794FE84155DC02AAC07 /* rehearsal-seg-cluster */ = {
 			isa = PBXGroup;
 			children = (
+				9FE18AAA155261A200701E82 /* libportaudio.2.dylib */,
+				9FE18AAB155261A200701E82 /* libportaudio.a */,
+				9FE18AAC155261A200701E82 /* libportaudio.la */,
+				9FE18AAD155261A200701E82 /* libzmq.1.dylib */,
+				9FE18AAE155261A200701E82 /* libzmq.a */,
+				9FE18AAF155261A200701E82 /* libzmq.dylib */,
+				9FE18AB0155261A200701E82 /* libzmq.la */,
 				9FFBEFE5154F0F380036367D /* lib */,
 				08FB7795FE84155DC02AAC07 /* Source */,
 				C6859E8C029090F304C91782 /* Documentation */,
@@ -159,6 +186,8 @@
 				9F75C3D2154E802300A7CA44 /* audiofilereader.h */,
 				9F75C3D3154E802300A7CA44 /* audioreader.cpp */,
 				9F75C3D4154E802300A7CA44 /* audioreader.h */,
+				9FE18ACC155262D400701E82 /* audio_player.h */,
+				9FE18ACB155262D400701E82 /* audio_player.cpp */,
 			);
 			name = "Audio IO";
 			sourceTree = "<group>";
@@ -264,6 +293,7 @@
 				9F79B8FB14D1505D001C8680 /* music_noise_classifier.cpp in Sources */,
 				9F79B91D14D15128001C8680 /* hmm_smoother.cpp in Sources */,
 				9F75C73F154EE64A00A7CA44 /* clip_cluster.cpp in Sources */,
+				9FE18ACD155262D400701E82 /* audio_player.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

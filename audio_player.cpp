@@ -62,7 +62,7 @@ bool tapper_set_music(const char *fn, float start, float end){
     sf_seek(snd, (int)(start * info.samplerate), SEEK_SET);
     audio.clear();
     int length = (int)((end - start) * info.samplerate);
-    for (int i = 0; i < length; i += 1024) {
+    for (int i = 0; i < length; i += 512) {
         sf_read_double(snd, data, 1024);
         for (int a = 0; a < 1024; ++a){
             audio.push_back(data[a]);

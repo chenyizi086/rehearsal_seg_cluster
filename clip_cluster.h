@@ -1,9 +1,9 @@
 #ifndef CLIP_CLUSTER_H
 #define CLIP_CLUSTER_H
 
-#include <vector>
 #include <fstream>
 #include <map>
+#include <vector>
 
 using namespace std;
 
@@ -14,6 +14,8 @@ public:
     Clip_cluster();
     ~Clip_cluster();
     void do_cluster(vector<Audio_clip *> &clips);
+    
+    string get_cluster_clips(string cilp);
 private:
     void do_clip_cluster(Audio_clip *clip);
     void compare_and_cluster(Audio_clip *clip, vector<float*> &data_cens, vector<float> &min_dist);

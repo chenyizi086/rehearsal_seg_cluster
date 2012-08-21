@@ -1,20 +1,23 @@
+
+
+#include "audioreader.h"
+#include "constant.h"
+#include "feature_extractor.h"
+#include "fft3/FFT3.h"
+#include "rsc_utils.h"
+
+#include "math.h"
+#include "stdio.h"
+#include "stdlib.h" // for OSX compatibility, malloc.h -> stdlib.h
 #ifdef _WIN32
 #include "malloc.h"
 #endif
 
-#include "stdlib.h" // for OSX compatibility, malloc.h -> stdlib.h
-#include <assert.h>
 #include <algorithm>
-#include "constant.h"
-#include "audioreader.h"
-#include "feature_extractor.h"
-#include "fft3/FFT3.h"
-#include "math.h"
+#include <assert.h>
 #include <cmath>
-#include "rsc_utils.h"
-#include "stdio.h"
-#include <string>
 #include <fstream>
+#include <string>
 
 #ifdef DEBUG
 #include <iostream> // cout
@@ -54,7 +57,7 @@ int Feature_extractor::get_spectrum(Audio_reader &reader, vector<float> &data_sp
 	if (!data_spec.empty()) {
 		data_spec.clear();
 	}
-    
+/*    
     if (verbose) {
         printf ("==============FILE ====================\n");
         reader.print_info();
@@ -62,6 +65,7 @@ int Feature_extractor::get_spectrum(Audio_reader &reader, vector<float> &data_sp
 #ifdef DEBUG
     printf("******** BEGIN SPECTRUM COMPUTATION *********\n");
 #endif
+*/
     
 	// since our parameters for classifier are fixed, so frame_size should actually be the same with the size of parameters, as in ths case, samples_per_frame should be eual to frame_size
     int frame_size = nextPowerOf2(reader.samples_per_frame);
@@ -94,16 +98,20 @@ int Feature_extractor::get_spectrum(Audio_reader &reader, vector<float> &data_sp
     
 	if (reader.read_window(frame_data)) {
         //fill out array with 0's till next power of 2
+        /*
 #ifdef DEBUG
         printf("samples_per_frame %ld sample %g\n", 
                reader.samples_per_frame, frame_data[0]);
 #endif
+         */
         for (i = reader.samples_per_frame; i < frame_size; i++) 
             frame_data[i] = 0;
-        
+
+        /*
 #ifdef DEBUG_LOG
         printf("preFFT: frame_data[1000] %g\n", frame_data[1000]);
 #endif
+         */
 		has_next = 1;
         
 		for (i = 0; i < reader.samples_per_frame; i++) {
@@ -137,7 +145,6 @@ int Feature_extractor::get_spectrum(Audio_reader &reader, vector<float> &data_sp
     for (i = 0; i < data_spec.size(); i++) {
         sq_sum += data_spec[i] * data_spec[i];
     }
-    cout << sq_sum << endl;
     if (sq_sum > 0.0001) {
         assert(sq_sum - 1 > -0.0001);
         assert(sq_sum - 1 < 0.0001);
@@ -191,18 +198,7 @@ int Feature_extractor::get_CENS(Audio_reader &reader, long nframes, vector<float
 				}
             }
             AREF2(chroma, i, j) = tmp;
-/*
-#ifdef DEBUG
-            cout << AREF2(chroma, i, j) << ") ";
-#endif
- */
-		}
-        /*
-#ifdef DEBUG  
-        cout << AREF2(chroma, i, CHROMA_BIN_COUNT) << endl;
-#endif
-         */
-        
+		}        
 	}
     
 	// claculate CENS, which is the convoltion of chroma stat help

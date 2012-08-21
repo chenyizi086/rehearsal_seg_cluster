@@ -6,22 +6,10 @@
 
 void Adaboost::load_classifier(const char *f_ada) {
     parameters = read_matfile(f_ada); 
-#ifdef DEBUG
-    cout << parameters.size() << endl;
-    if (parameters.size() != 0) {
-        cout << parameters[0].size() << endl;
-    }
-#endif
 }
 
 void Adaboost::load_eigenmusic_inv(const char *f_em) {
     eigen_music_inv = read_matfile(f_em);
-#ifdef DEBUG
-    cout << eigen_music_inv.size() << endl;
-    if (eigen_music_inv.size() != 0) {
-        cout << eigen_music_inv[0].size() << endl;
-    }
-#endif
 }
 
 int Adaboost::do_prediction(vector<float> data, float* ada_raw) {

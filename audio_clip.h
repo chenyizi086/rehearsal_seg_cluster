@@ -5,8 +5,9 @@
 #include <iostream>
 #include <string>
 using namespace std;
+
 /*
- * A class to represent segments clip
+ * A class to represent segments
  */
 class Audio_clip {
 public:

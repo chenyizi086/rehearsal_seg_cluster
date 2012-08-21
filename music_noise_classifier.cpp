@@ -7,6 +7,7 @@
 #include "feature_extractor.h"
 #include "music_noise_classifier.h"
 
+#include <ctime>
 #include <iostream>
 using namespace std;
 
@@ -40,9 +41,19 @@ void Music_noise_classifier::do_music_noise_classify(const char *filename, vecto
 	vector<int> pred_result, result_no_smooth, result_with_smooth;
 	vector<float> ada_raw_result;
     
+//#ifdef DEBUG
+    clock_t start, end;
+//#endif
+    
+    start = clock();
 	do_adaboost(filename, pred_result, ada_raw_result);
+    end = clock();
+    cout << "Running Time for adaboost : " << (double) (end - start) / CLOCKS_PER_SEC << endl;
 
+    start = clock();
 	hmms.do_smooth(ada_raw_result, result_with_smooth);
+    end = clock();
+    cout << "Running Time for hmm : " << (double) (end - start) / CLOCKS_PER_SEC << endl;
 
 	do_gen_clips(filename, result_with_smooth, clips);
 }
@@ -52,6 +63,10 @@ void Music_noise_classifier::do_adaboost(const char *filename, vector<int> &pred
 	Audio_file_reader reader;
 	vector<float> aver_spec, spectrum;
 	float ada_raw;
+    clock_t start, end;
+    
+    double running_ada = 0;
+    
 	//no overlapping
 	fe_mnc.set_parameters(SAMPLES_PER_FRAME / RESAMPLE_FREQ, SAMPLES_PER_FRAME / RESAMPLE_FREQ);
 	
@@ -72,7 +87,12 @@ void Music_noise_classifier::do_adaboost(const char *filename, vector<int> &pred
 			for (i = 0; i < aver_spec.size(); i++) {
 				aver_spec[i] /= NUM_AVER;
 			}
+            start = clock();
             pred_result.push_back(ada.do_prediction(aver_spec, &ada_raw));
+            end = clock();
+            
+            running_ada += (double)(end - start) / CLOCKS_PER_SEC;
+            
 			ada_raw_result.push_back(ada_raw);
 			// reassign the average to 0
 			aver_spec.assign(SAMPLES_PER_FRAME / 2 + 1, 0);
@@ -80,9 +100,6 @@ void Music_noise_classifier::do_adaboost(const char *filename, vector<int> &pred
 
 		if (fe_mnc.get_spectrum(reader, spectrum, MNC_DEBUG_FLAG)) {            
 #ifdef DEBUG
-            cout << aver_spec.size() << endl;
-            cout << spectrum.size() << endl;
-            cout << "frame # " << count << endl;
 			assert(aver_spec.size() == spectrum.size());
 			assert(spectrum.size() == SAMPLES_PER_FRAME / 2 + 1);
 #endif
@@ -91,18 +108,25 @@ void Music_noise_classifier::do_adaboost(const char *filename, vector<int> &pred
 			}
 			count++;
 		} else {
-            cout << "the last un-filled frame" << endl;
 			// handle the last frame, if any
 			if (count % NUM_AVER != 0) {
 				for (i = 0; i < aver_spec.size(); i++) {
 					aver_spec[i] /= count % NUM_AVER;
 				}
 				pred_result.push_back(ada.do_prediction(aver_spec, &ada_raw));
+            
+                start = clock();
 				ada_raw_result.push_back(ada_raw);
+                end = clock();
+                
+                running_ada += (double)(end - start) / CLOCKS_PER_SEC;
 			}
 			break;
 		}
 	}
+    
+    cout << "Running Time for p_ada : " << running_ada << endl;
+
 }
 
 void Music_noise_classifier::do_gen_clips(const char* filename, vector<int> result_with_smooth, vector<Audio_clip *> &clips) {

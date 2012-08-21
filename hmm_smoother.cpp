@@ -1,9 +1,11 @@
+#include "constant.h"
 #include "hmm_smoother.h"
+
 #include "math.h"
 #include "stdio.h"
-#include "constant.h"
-#include <vector>
+
 #include <algorithm>
+#include <vector>
 
 #define MAX(x, y) x > y ? x:y
 
