@@ -38,10 +38,7 @@ public:
         }
         return false;
     };
-	//friend istream &operator >> (istream &is, Audio_clip &clip) {
-	//	is >> clip.filename >> "\t[" >> clip.start >> ", " >> clip.end << "]\t" << clip.is_music;
-	//	return is;
-	//}
+
 private:
 	string filename;
 	int start;

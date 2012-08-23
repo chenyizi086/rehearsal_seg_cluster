@@ -34,7 +34,6 @@ bool FE_DEBUG_FLAG = true;
 
 FILE *dbf = NULL;
 
-
 Feature_extractor::Feature_extractor() {
 #ifdef DEBUG_LOG
 	dbf = fopen("feature_extractor_debug.txt", "w");

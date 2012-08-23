@@ -5,6 +5,8 @@
 #define DEBUG
 #define DEBUG_LOG
 #define FIXED_PARAS
+// to turn on the time measuring flag
+#define TIME_MEAS
 
 /*
  * Constant numbers for adaboost audio processing

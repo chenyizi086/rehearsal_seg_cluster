@@ -183,7 +183,9 @@ void Clip_cluster::do_clip_cluster(Audio_clip *clip) {
     vector<float*> data_cens;
     vector<float> min_dist;
     
+#ifdef TIME_MEAS
     clock_t start_t, end_t;
+#endif
     
     Audio_file_reader reader_clip;
     
@@ -199,12 +201,16 @@ void Clip_cluster::do_clip_cluster(Audio_clip *clip) {
     
     nframes = (end - start + 1) * NUM_AVER * (SAMPLES_PER_FRAME_CHROMA / HOP_SIZE_CHROMA);
     
+#ifdef TIME_MEAS
     start_t = clock();
+#endif
     fe_clip.get_CENS(reader_clip, nframes, data_cens);
+#ifdef TIME_MEAS
     end_t = clock();
     cout << "Running Time for CENS : " << (double) (end_t - start_t) / CLOCKS_PER_SEC << endl;
 
     start_t = clock();
+#endif
     
     if (all_temp_cens.size() != 0) {
         compare_and_cluster(clip, data_cens, min_dist);
@@ -222,8 +228,10 @@ void Clip_cluster::do_clip_cluster(Audio_clip *clip) {
         }
     }
     
+#ifdef TIME_MEAS
     end_t = clock();
     cout << "Running Time for matching and clustering : " << (double) (end_t - start_t) / CLOCKS_PER_SEC << endl;
+#endif
 
 }
 
