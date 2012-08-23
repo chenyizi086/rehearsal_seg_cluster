@@ -24,8 +24,11 @@
 #ifdef DEBUG
 #include <iostream> // cout
 #endif
-using namespace std;
 
+#define p1 0.0577622650466621
+#define p2 2.1011784386926213
+
+using namespace std;
 
 bool FE_DEBUG_FLAG = true;
 
