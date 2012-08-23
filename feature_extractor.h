@@ -36,6 +36,9 @@ public:
     };
     double get_frame_period(){return frame_period;};
     double get_window_size(){return window_size;};
+#ifdef DEBUG_LOG
+    FILE *dbf;
+#endif
     
 private:
     int gen_chroma(Audio_reader &reader, int hcutoff, int lcutoff, long nframes, float **chrom_energy, double *actual_frame_period);
@@ -44,10 +47,12 @@ private:
     void gen_Hanning(float *h, int n);
     void gen_Magnitude(float* inR, float* inI, int num_bin, float* out);
     
+    void normalize_chroma(float *cv);
     void norm_l2(float *chroma_vec);
     
     double frame_period;		// frame size in seconds
     double window_size;		// window size in seconds
+
 };
 
 #endif 

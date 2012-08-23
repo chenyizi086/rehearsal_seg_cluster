@@ -9,26 +9,27 @@
 /* Begin PBXBuildFile section */
 		8DD76F650486A84900D96B5E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08FB7796FE84155DC02AAC07 /* main.cpp */; settings = {ATTRIBUTES = (); }; };
 		8DD76F6A0486A84900D96B5E /* rehearsal-seg-cluster.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = C6859E8B029090EE04C91782 /* rehearsal-seg-cluster.1 */; };
-		9F75C73F154EE64A00A7CA44 /* clip_cluster.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F75C73D154EE64A00A7CA44 /* clip_cluster.cpp */; };
-		9F79B8FB14D1505D001C8680 /* music_noise_classifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F79B8FA14D1505D001C8680 /* music_noise_classifier.cpp */; };
-		9F79B91D14D15128001C8680 /* hmm_smoother.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F79B91C14D15128001C8680 /* hmm_smoother.cpp */; };
-		9FA869371497FEF400675AB9 /* rsc_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FA869361497FEF400675AB9 /* rsc_utils.cpp */; };
-		9FA869BE14981AEC00675AB9 /* FFT3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FA869BC14981AEC00675AB9 /* FFT3.cpp */; };
-		9FE18AB1155261A200701E82 /* libportaudio.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FE18AAA155261A200701E82 /* libportaudio.2.dylib */; };
-		9FE18AB2155261A200701E82 /* libportaudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FE18AAB155261A200701E82 /* libportaudio.a */; };
-		9FE18AB3155261A200701E82 /* libzmq.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FE18AAD155261A200701E82 /* libzmq.1.dylib */; };
-		9FE18AB4155261A200701E82 /* libzmq.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FE18AAE155261A200701E82 /* libzmq.a */; };
-		9FE18AB5155261A200701E82 /* libzmq.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FE18AAF155261A200701E82 /* libzmq.dylib */; };
-		9FE18ACD155262D400701E82 /* audio_player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FE18ACB155262D400701E82 /* audio_player.cpp */; };
-		9FFBEFC9154F0DAD0036367D /* audio_clip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F75C3CF154E802300A7CA44 /* audio_clip.cpp */; };
-		9FFBEFDB154F0DDE0036367D /* feature_extractor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F75C3D8154E802300A7CA44 /* feature_extractor.cpp */; };
-		9FFBEFDC154F0DDE0036367D /* audiofilereader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F75C3D1154E802300A7CA44 /* audiofilereader.cpp */; };
-		9FFBEFDD154F0DDE0036367D /* audioreader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F75C3D3154E802300A7CA44 /* audioreader.cpp */; };
-		9FFBEFDE154F0DDE0036367D /* adaboost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F75C3CD154E802300A7CA44 /* adaboost.cpp */; };
-		9FFBEFEC154F0F380036367D /* libsamplerate.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FFBEFE6154F0F380036367D /* libsamplerate.0.dylib */; };
-		9FFBEFED154F0F380036367D /* libsamplerate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FFBEFE7154F0F380036367D /* libsamplerate.a */; };
-		9FFBEFEE154F0F390036367D /* libsndfile.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FFBEFE9154F0F380036367D /* libsndfile.1.dylib */; };
-		9FFBEFEF154F0F390036367D /* libsndfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FFBEFEA154F0F380036367D /* libsndfile.a */; };
+		9FC7DA5815E5E84900F73D40 /* adaboost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FC7DA4E15E5E84900F73D40 /* adaboost.cpp */; };
+		9FC7DA5915E5E84900F73D40 /* audio_clip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FC7DA5015E5E84900F73D40 /* audio_clip.cpp */; };
+		9FC7DA5A15E5E84900F73D40 /* audio_player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FC7DA5215E5E84900F73D40 /* audio_player.cpp */; };
+		9FC7DA5B15E5E84900F73D40 /* audiofilereader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FC7DA5415E5E84900F73D40 /* audiofilereader.cpp */; };
+		9FC7DA5C15E5E84900F73D40 /* audioreader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FC7DA5615E5E84900F73D40 /* audioreader.cpp */; };
+		9FC7DA5F15E5E87600F73D40 /* rsc_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FC7DA5D15E5E87600F73D40 /* rsc_utils.cpp */; };
+		9FC7DA6215E5E89200F73D40 /* music_noise_classifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FC7DA6015E5E89200F73D40 /* music_noise_classifier.cpp */; };
+		9FC7DA6915E5E8D600F73D40 /* FFT3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FC7DA6715E5E8D600F73D40 /* FFT3.cpp */; };
+		9FC7DA6F15E5E8EB00F73D40 /* clip_cluster.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FC7DA6A15E5E8EB00F73D40 /* clip_cluster.cpp */; };
+		9FC7DA7015E5E8EB00F73D40 /* feature_extractor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FC7DA6D15E5E8EB00F73D40 /* feature_extractor.cpp */; };
+		9FC7DA7515E5E8F400F73D40 /* hmm_smoother.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FC7DA7215E5E8F400F73D40 /* hmm_smoother.cpp */; };
+		9FC7DA8F15E5E95800F73D40 /* libportaudio.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FC7DA8115E5E95800F73D40 /* libportaudio.2.dylib */; };
+		9FC7DA9015E5E95800F73D40 /* libportaudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FC7DA8215E5E95800F73D40 /* libportaudio.a */; };
+		9FC7DA9115E5E95800F73D40 /* libportaudio.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FC7DA8315E5E95800F73D40 /* libportaudio.dylib */; };
+		9FC7DA9215E5E95800F73D40 /* libsamplerate.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FC7DA8515E5E95800F73D40 /* libsamplerate.0.dylib */; };
+		9FC7DA9315E5E95800F73D40 /* libsamplerate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FC7DA8615E5E95800F73D40 /* libsamplerate.a */; };
+		9FC7DA9415E5E95800F73D40 /* libsndfile.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FC7DA8815E5E95800F73D40 /* libsndfile.1.dylib */; };
+		9FC7DA9515E5E95800F73D40 /* libsndfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FC7DA8915E5E95800F73D40 /* libsndfile.a */; };
+		9FC7DA9615E5E95800F73D40 /* libzmq.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FC7DA8B15E5E95800F73D40 /* libzmq.1.dylib */; };
+		9FC7DA9715E5E95800F73D40 /* libzmq.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FC7DA8C15E5E95800F73D40 /* libzmq.a */; };
+		9FC7DA9815E5E95800F73D40 /* libzmq.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FC7DA8D15E5E95800F73D40 /* libzmq.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -47,42 +48,43 @@
 /* Begin PBXFileReference section */
 		08FB7796FE84155DC02AAC07 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		8DD76F6C0486A84900D96B5E /* rehearsal-seg-cluster */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "rehearsal-seg-cluster"; sourceTree = BUILT_PRODUCTS_DIR; };
-		9F75C3CD154E802300A7CA44 /* adaboost.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = adaboost.cpp; sourceTree = "<group>"; };
-		9F75C3CE154E802300A7CA44 /* adaboost.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = adaboost.h; sourceTree = "<group>"; };
-		9F75C3CF154E802300A7CA44 /* audio_clip.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = audio_clip.cpp; sourceTree = "<group>"; };
-		9F75C3D0154E802300A7CA44 /* audio_clip.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = audio_clip.h; sourceTree = "<group>"; };
-		9F75C3D1154E802300A7CA44 /* audiofilereader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = audiofilereader.cpp; sourceTree = "<group>"; };
-		9F75C3D2154E802300A7CA44 /* audiofilereader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = audiofilereader.h; sourceTree = "<group>"; };
-		9F75C3D3154E802300A7CA44 /* audioreader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = audioreader.cpp; sourceTree = "<group>"; };
-		9F75C3D4154E802300A7CA44 /* audioreader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = audioreader.h; sourceTree = "<group>"; };
-		9F75C3D7154E802300A7CA44 /* constant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = constant.h; sourceTree = "<group>"; };
-		9F75C3D8154E802300A7CA44 /* feature_extractor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = feature_extractor.cpp; sourceTree = "<group>"; };
-		9F75C3D9154E802300A7CA44 /* feature_extractor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = feature_extractor.h; sourceTree = "<group>"; };
-		9F75C73D154EE64A00A7CA44 /* clip_cluster.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = clip_cluster.cpp; sourceTree = "<group>"; };
-		9F75C75B154EE7BA00A7CA44 /* clip_cluster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = clip_cluster.h; sourceTree = "<group>"; };
-		9F79B8FA14D1505D001C8680 /* music_noise_classifier.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = music_noise_classifier.cpp; sourceTree = "<group>"; };
-		9F79B8FE14D1507C001C8680 /* music_noise_classifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = music_noise_classifier.h; sourceTree = "<group>"; };
-		9F79B91B14D15128001C8680 /* hmm_smoother.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hmm_smoother.h; sourceTree = "<group>"; };
-		9F79B91C14D15128001C8680 /* hmm_smoother.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hmm_smoother.cpp; sourceTree = "<group>"; };
-		9FA869361497FEF400675AB9 /* rsc_utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rsc_utils.cpp; sourceTree = "<group>"; };
-		9FA8693B1497FF2300675AB9 /* rsc_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rsc_utils.h; sourceTree = "<group>"; };
-		9FA869BC14981AEC00675AB9 /* FFT3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FFT3.cpp; path = fft3/FFT3.cpp; sourceTree = "<group>"; };
-		9FA869BD14981AEC00675AB9 /* FFT3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FFT3.h; path = fft3/FFT3.h; sourceTree = "<group>"; };
-		9FE18AAA155261A200701E82 /* libportaudio.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libportaudio.2.dylib; sourceTree = "<group>"; };
-		9FE18AAB155261A200701E82 /* libportaudio.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libportaudio.a; sourceTree = "<group>"; };
-		9FE18AAC155261A200701E82 /* libportaudio.la */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = libportaudio.la; sourceTree = "<group>"; };
-		9FE18AAD155261A200701E82 /* libzmq.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libzmq.1.dylib; sourceTree = "<group>"; };
-		9FE18AAE155261A200701E82 /* libzmq.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libzmq.a; sourceTree = "<group>"; };
-		9FE18AAF155261A200701E82 /* libzmq.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libzmq.dylib; sourceTree = "<group>"; };
-		9FE18AB0155261A200701E82 /* libzmq.la */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = libzmq.la; sourceTree = "<group>"; };
-		9FE18ACB155262D400701E82 /* audio_player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = audio_player.cpp; sourceTree = "<group>"; };
-		9FE18ACC155262D400701E82 /* audio_player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = audio_player.h; sourceTree = "<group>"; };
-		9FFBEFE6154F0F380036367D /* libsamplerate.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libsamplerate.0.dylib; sourceTree = "<group>"; };
-		9FFBEFE7154F0F380036367D /* libsamplerate.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsamplerate.a; sourceTree = "<group>"; };
-		9FFBEFE8154F0F380036367D /* libsamplerate.la */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = libsamplerate.la; sourceTree = "<group>"; };
-		9FFBEFE9154F0F380036367D /* libsndfile.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libsndfile.1.dylib; sourceTree = "<group>"; };
-		9FFBEFEA154F0F380036367D /* libsndfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsndfile.a; sourceTree = "<group>"; };
-		9FFBEFEB154F0F380036367D /* libsndfile.la */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = libsndfile.la; sourceTree = "<group>"; };
+		9FC7DA4E15E5E84900F73D40 /* adaboost.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = adaboost.cpp; sourceTree = "<group>"; };
+		9FC7DA4F15E5E84900F73D40 /* adaboost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = adaboost.h; sourceTree = "<group>"; };
+		9FC7DA5015E5E84900F73D40 /* audio_clip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = audio_clip.cpp; sourceTree = "<group>"; };
+		9FC7DA5115E5E84900F73D40 /* audio_clip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = audio_clip.h; sourceTree = "<group>"; };
+		9FC7DA5215E5E84900F73D40 /* audio_player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = audio_player.cpp; sourceTree = "<group>"; };
+		9FC7DA5315E5E84900F73D40 /* audio_player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = audio_player.h; sourceTree = "<group>"; };
+		9FC7DA5415E5E84900F73D40 /* audiofilereader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = audiofilereader.cpp; sourceTree = "<group>"; };
+		9FC7DA5515E5E84900F73D40 /* audiofilereader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = audiofilereader.h; sourceTree = "<group>"; };
+		9FC7DA5615E5E84900F73D40 /* audioreader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = audioreader.cpp; sourceTree = "<group>"; };
+		9FC7DA5715E5E84900F73D40 /* audioreader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = audioreader.h; sourceTree = "<group>"; };
+		9FC7DA5D15E5E87600F73D40 /* rsc_utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rsc_utils.cpp; sourceTree = "<group>"; };
+		9FC7DA5E15E5E87600F73D40 /* rsc_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rsc_utils.h; sourceTree = "<group>"; };
+		9FC7DA6015E5E89200F73D40 /* music_noise_classifier.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = music_noise_classifier.cpp; sourceTree = "<group>"; };
+		9FC7DA6115E5E89200F73D40 /* music_noise_classifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = music_noise_classifier.h; sourceTree = "<group>"; };
+		9FC7DA6715E5E8D600F73D40 /* FFT3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FFT3.cpp; sourceTree = "<group>"; };
+		9FC7DA6815E5E8D600F73D40 /* FFT3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFT3.h; sourceTree = "<group>"; };
+		9FC7DA6A15E5E8EB00F73D40 /* clip_cluster.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = clip_cluster.cpp; sourceTree = "<group>"; };
+		9FC7DA6B15E5E8EB00F73D40 /* clip_cluster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = clip_cluster.h; sourceTree = "<group>"; };
+		9FC7DA6C15E5E8EB00F73D40 /* constant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = constant.h; sourceTree = "<group>"; };
+		9FC7DA6D15E5E8EB00F73D40 /* feature_extractor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = feature_extractor.cpp; sourceTree = "<group>"; };
+		9FC7DA6E15E5E8EB00F73D40 /* feature_extractor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = feature_extractor.h; sourceTree = "<group>"; };
+		9FC7DA7215E5E8F400F73D40 /* hmm_smoother.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hmm_smoother.cpp; sourceTree = "<group>"; };
+		9FC7DA7315E5E8F400F73D40 /* hmm_smoother.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hmm_smoother.h; sourceTree = "<group>"; };
+		9FC7DA8115E5E95800F73D40 /* libportaudio.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libportaudio.2.dylib; sourceTree = "<group>"; };
+		9FC7DA8215E5E95800F73D40 /* libportaudio.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libportaudio.a; sourceTree = "<group>"; };
+		9FC7DA8315E5E95800F73D40 /* libportaudio.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libportaudio.dylib; sourceTree = "<group>"; };
+		9FC7DA8415E5E95800F73D40 /* libportaudio.la */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = libportaudio.la; sourceTree = "<group>"; };
+		9FC7DA8515E5E95800F73D40 /* libsamplerate.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libsamplerate.0.dylib; sourceTree = "<group>"; };
+		9FC7DA8615E5E95800F73D40 /* libsamplerate.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsamplerate.a; sourceTree = "<group>"; };
+		9FC7DA8715E5E95800F73D40 /* libsamplerate.la */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = libsamplerate.la; sourceTree = "<group>"; };
+		9FC7DA8815E5E95800F73D40 /* libsndfile.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libsndfile.1.dylib; sourceTree = "<group>"; };
+		9FC7DA8915E5E95800F73D40 /* libsndfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsndfile.a; sourceTree = "<group>"; };
+		9FC7DA8A15E5E95800F73D40 /* libsndfile.la */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = libsndfile.la; sourceTree = "<group>"; };
+		9FC7DA8B15E5E95800F73D40 /* libzmq.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libzmq.1.dylib; sourceTree = "<group>"; };
+		9FC7DA8C15E5E95800F73D40 /* libzmq.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libzmq.a; sourceTree = "<group>"; };
+		9FC7DA8D15E5E95800F73D40 /* libzmq.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libzmq.dylib; sourceTree = "<group>"; };
+		9FC7DA8E15E5E95800F73D40 /* libzmq.la */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = libzmq.la; sourceTree = "<group>"; };
 		C6859E8B029090EE04C91782 /* rehearsal-seg-cluster.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = "rehearsal-seg-cluster.1"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -91,15 +93,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9FFBEFEC154F0F380036367D /* libsamplerate.0.dylib in Frameworks */,
-				9FFBEFED154F0F380036367D /* libsamplerate.a in Frameworks */,
-				9FFBEFEE154F0F390036367D /* libsndfile.1.dylib in Frameworks */,
-				9FFBEFEF154F0F390036367D /* libsndfile.a in Frameworks */,
-				9FE18AB1155261A200701E82 /* libportaudio.2.dylib in Frameworks */,
-				9FE18AB2155261A200701E82 /* libportaudio.a in Frameworks */,
-				9FE18AB3155261A200701E82 /* libzmq.1.dylib in Frameworks */,
-				9FE18AB4155261A200701E82 /* libzmq.a in Frameworks */,
-				9FE18AB5155261A200701E82 /* libzmq.dylib in Frameworks */,
+				9FC7DA8F15E5E95800F73D40 /* libportaudio.2.dylib in Frameworks */,
+				9FC7DA9015E5E95800F73D40 /* libportaudio.a in Frameworks */,
+				9FC7DA9115E5E95800F73D40 /* libportaudio.dylib in Frameworks */,
+				9FC7DA9215E5E95800F73D40 /* libsamplerate.0.dylib in Frameworks */,
+				9FC7DA9315E5E95800F73D40 /* libsamplerate.a in Frameworks */,
+				9FC7DA9415E5E95800F73D40 /* libsndfile.1.dylib in Frameworks */,
+				9FC7DA9515E5E95800F73D40 /* libsndfile.a in Frameworks */,
+				9FC7DA9615E5E95800F73D40 /* libzmq.1.dylib in Frameworks */,
+				9FC7DA9715E5E95800F73D40 /* libzmq.a in Frameworks */,
+				9FC7DA9815E5E95800F73D40 /* libzmq.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -109,14 +112,7 @@
 		08FB7794FE84155DC02AAC07 /* rehearsal-seg-cluster */ = {
 			isa = PBXGroup;
 			children = (
-				9FE18AAA155261A200701E82 /* libportaudio.2.dylib */,
-				9FE18AAB155261A200701E82 /* libportaudio.a */,
-				9FE18AAC155261A200701E82 /* libportaudio.la */,
-				9FE18AAD155261A200701E82 /* libzmq.1.dylib */,
-				9FE18AAE155261A200701E82 /* libzmq.a */,
-				9FE18AAF155261A200701E82 /* libzmq.dylib */,
-				9FE18AB0155261A200701E82 /* libzmq.la */,
-				9FFBEFE5154F0F380036367D /* lib */,
+				9FC7DA8015E5E95800F73D40 /* lib */,
 				08FB7795FE84155DC02AAC07 /* Source */,
 				C6859E8C029090F304C91782 /* Documentation */,
 				1AB674ADFE9D54B511CA2CBB /* Products */,
@@ -127,14 +123,12 @@
 		08FB7795FE84155DC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				9F75C5BC154E96DE00A7CA44 /* Misc */,
-				9F75C5BA154E96B500A7CA44 /* Features Extraction */,
-				9F75C5AE154E965800A7CA44 /* Audio IO */,
-				9F75C5AD154E964B00A7CA44 /* Cluster */,
-				9F75C5AC154E962D00A7CA44 /* MNC */,
-				9F75C5A3154E961B00A7CA44 /* FFT3 */,
-				9F75C3CF154E802300A7CA44 /* audio_clip.cpp */,
-				9F75C3D0154E802300A7CA44 /* audio_clip.h */,
+				9FC7DA9F15E5E9F800F73D40 /* Feature_Extractor */,
+				9FC7DA9E15E5E9E200F73D40 /* Cluster */,
+				9FC7DA9D15E5E9BF00F73D40 /* AudioIO */,
+				9FC7DA9C15E5E9A800F73D40 /* MNC */,
+				9FC7DA9B15E5E99900F73D40 /* Misc */,
+				9FC7DA6615E5E8D600F73D40 /* fft3 */,
 				08FB7796FE84155DC02AAC07 /* main.cpp */,
 			);
 			name = Source;
@@ -148,80 +142,90 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		9F75C5A3154E961B00A7CA44 /* FFT3 */ = {
+		9FC7DA6615E5E8D600F73D40 /* fft3 */ = {
 			isa = PBXGroup;
 			children = (
-				9FA869BC14981AEC00675AB9 /* FFT3.cpp */,
-				9FA869BD14981AEC00675AB9 /* FFT3.h */,
+				9FC7DA6715E5E8D600F73D40 /* FFT3.cpp */,
+				9FC7DA6815E5E8D600F73D40 /* FFT3.h */,
 			);
-			name = FFT3;
+			path = fft3;
 			sourceTree = "<group>";
 		};
-		9F75C5AC154E962D00A7CA44 /* MNC */ = {
+		9FC7DA8015E5E95800F73D40 /* lib */ = {
 			isa = PBXGroup;
 			children = (
-				9F75C3CD154E802300A7CA44 /* adaboost.cpp */,
-				9F75C3CE154E802300A7CA44 /* adaboost.h */,
-				9F79B8FA14D1505D001C8680 /* music_noise_classifier.cpp */,
-				9F79B8FE14D1507C001C8680 /* music_noise_classifier.h */,
-				9F79B91B14D15128001C8680 /* hmm_smoother.h */,
-				9F79B91C14D15128001C8680 /* hmm_smoother.cpp */,
+				9FC7DA8115E5E95800F73D40 /* libportaudio.2.dylib */,
+				9FC7DA8215E5E95800F73D40 /* libportaudio.a */,
+				9FC7DA8315E5E95800F73D40 /* libportaudio.dylib */,
+				9FC7DA8415E5E95800F73D40 /* libportaudio.la */,
+				9FC7DA8515E5E95800F73D40 /* libsamplerate.0.dylib */,
+				9FC7DA8615E5E95800F73D40 /* libsamplerate.a */,
+				9FC7DA8715E5E95800F73D40 /* libsamplerate.la */,
+				9FC7DA8815E5E95800F73D40 /* libsndfile.1.dylib */,
+				9FC7DA8915E5E95800F73D40 /* libsndfile.a */,
+				9FC7DA8A15E5E95800F73D40 /* libsndfile.la */,
+				9FC7DA8B15E5E95800F73D40 /* libzmq.1.dylib */,
+				9FC7DA8C15E5E95800F73D40 /* libzmq.a */,
+				9FC7DA8D15E5E95800F73D40 /* libzmq.dylib */,
+				9FC7DA8E15E5E95800F73D40 /* libzmq.la */,
 			);
-			name = MNC;
+			path = lib;
 			sourceTree = "<group>";
 		};
-		9F75C5AD154E964B00A7CA44 /* Cluster */ = {
+		9FC7DA9B15E5E99900F73D40 /* Misc */ = {
 			isa = PBXGroup;
 			children = (
-				9F75C75B154EE7BA00A7CA44 /* clip_cluster.h */,
-				9F75C73D154EE64A00A7CA44 /* clip_cluster.cpp */,
-			);
-			name = Cluster;
-			sourceTree = "<group>";
-		};
-		9F75C5AE154E965800A7CA44 /* Audio IO */ = {
-			isa = PBXGroup;
-			children = (
-				9F75C3D1154E802300A7CA44 /* audiofilereader.cpp */,
-				9F75C3D2154E802300A7CA44 /* audiofilereader.h */,
-				9F75C3D3154E802300A7CA44 /* audioreader.cpp */,
-				9F75C3D4154E802300A7CA44 /* audioreader.h */,
-				9FE18ACC155262D400701E82 /* audio_player.h */,
-				9FE18ACB155262D400701E82 /* audio_player.cpp */,
-			);
-			name = "Audio IO";
-			sourceTree = "<group>";
-		};
-		9F75C5BA154E96B500A7CA44 /* Features Extraction */ = {
-			isa = PBXGroup;
-			children = (
-				9F75C3D8154E802300A7CA44 /* feature_extractor.cpp */,
-				9F75C3D9154E802300A7CA44 /* feature_extractor.h */,
-			);
-			name = "Features Extraction";
-			sourceTree = "<group>";
-		};
-		9F75C5BC154E96DE00A7CA44 /* Misc */ = {
-			isa = PBXGroup;
-			children = (
-				9F75C3D7154E802300A7CA44 /* constant.h */,
-				9FA8693B1497FF2300675AB9 /* rsc_utils.h */,
-				9FA869361497FEF400675AB9 /* rsc_utils.cpp */,
+				9FC7DA4E15E5E84900F73D40 /* adaboost.cpp */,
+				9FC7DA6015E5E89200F73D40 /* music_noise_classifier.cpp */,
+				9FC7DA5D15E5E87600F73D40 /* rsc_utils.cpp */,
+				9FC7DA5E15E5E87600F73D40 /* rsc_utils.h */,
+				9FC7DA6C15E5E8EB00F73D40 /* constant.h */,
 			);
 			name = Misc;
 			sourceTree = "<group>";
 		};
-		9FFBEFE5154F0F380036367D /* lib */ = {
+		9FC7DA9C15E5E9A800F73D40 /* MNC */ = {
 			isa = PBXGroup;
 			children = (
-				9FFBEFE6154F0F380036367D /* libsamplerate.0.dylib */,
-				9FFBEFE7154F0F380036367D /* libsamplerate.a */,
-				9FFBEFE8154F0F380036367D /* libsamplerate.la */,
-				9FFBEFE9154F0F380036367D /* libsndfile.1.dylib */,
-				9FFBEFEA154F0F380036367D /* libsndfile.a */,
-				9FFBEFEB154F0F380036367D /* libsndfile.la */,
+				9FC7DA4F15E5E84900F73D40 /* adaboost.h */,
+				9FC7DA6115E5E89200F73D40 /* music_noise_classifier.h */,
 			);
-			path = lib;
+			name = MNC;
+			sourceTree = "<group>";
+		};
+		9FC7DA9D15E5E9BF00F73D40 /* AudioIO */ = {
+			isa = PBXGroup;
+			children = (
+				9FC7DA5215E5E84900F73D40 /* audio_player.cpp */,
+				9FC7DA5315E5E84900F73D40 /* audio_player.h */,
+				9FC7DA5415E5E84900F73D40 /* audiofilereader.cpp */,
+				9FC7DA5515E5E84900F73D40 /* audiofilereader.h */,
+				9FC7DA5615E5E84900F73D40 /* audioreader.cpp */,
+				9FC7DA5715E5E84900F73D40 /* audioreader.h */,
+			);
+			name = AudioIO;
+			sourceTree = "<group>";
+		};
+		9FC7DA9E15E5E9E200F73D40 /* Cluster */ = {
+			isa = PBXGroup;
+			children = (
+				9FC7DA6A15E5E8EB00F73D40 /* clip_cluster.cpp */,
+				9FC7DA6B15E5E8EB00F73D40 /* clip_cluster.h */,
+				9FC7DA5015E5E84900F73D40 /* audio_clip.cpp */,
+				9FC7DA7215E5E8F400F73D40 /* hmm_smoother.cpp */,
+				9FC7DA7315E5E8F400F73D40 /* hmm_smoother.h */,
+				9FC7DA5115E5E84900F73D40 /* audio_clip.h */,
+			);
+			name = Cluster;
+			sourceTree = "<group>";
+		};
+		9FC7DA9F15E5E9F800F73D40 /* Feature_Extractor */ = {
+			isa = PBXGroup;
+			children = (
+				9FC7DA6D15E5E8EB00F73D40 /* feature_extractor.cpp */,
+				9FC7DA6E15E5E8EB00F73D40 /* feature_extractor.h */,
+			);
+			name = Feature_Extractor;
 			sourceTree = "<group>";
 		};
 		C6859E8C029090F304C91782 /* Documentation */ = {
@@ -282,18 +286,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9FA869371497FEF400675AB9 /* rsc_utils.cpp in Sources */,
-				9FFBEFDB154F0DDE0036367D /* feature_extractor.cpp in Sources */,
-				9FFBEFDC154F0DDE0036367D /* audiofilereader.cpp in Sources */,
-				9FFBEFDD154F0DDE0036367D /* audioreader.cpp in Sources */,
-				9FFBEFDE154F0DDE0036367D /* adaboost.cpp in Sources */,
 				8DD76F650486A84900D96B5E /* main.cpp in Sources */,
-				9FFBEFC9154F0DAD0036367D /* audio_clip.cpp in Sources */,
-				9FA869BE14981AEC00675AB9 /* FFT3.cpp in Sources */,
-				9F79B8FB14D1505D001C8680 /* music_noise_classifier.cpp in Sources */,
-				9F79B91D14D15128001C8680 /* hmm_smoother.cpp in Sources */,
-				9F75C73F154EE64A00A7CA44 /* clip_cluster.cpp in Sources */,
-				9FE18ACD155262D400701E82 /* audio_player.cpp in Sources */,
+				9FC7DA5815E5E84900F73D40 /* adaboost.cpp in Sources */,
+				9FC7DA5915E5E84900F73D40 /* audio_clip.cpp in Sources */,
+				9FC7DA5A15E5E84900F73D40 /* audio_player.cpp in Sources */,
+				9FC7DA5B15E5E84900F73D40 /* audiofilereader.cpp in Sources */,
+				9FC7DA5C15E5E84900F73D40 /* audioreader.cpp in Sources */,
+				9FC7DA5F15E5E87600F73D40 /* rsc_utils.cpp in Sources */,
+				9FC7DA6215E5E89200F73D40 /* music_noise_classifier.cpp in Sources */,
+				9FC7DA6915E5E8D600F73D40 /* FFT3.cpp in Sources */,
+				9FC7DA6F15E5E8EB00F73D40 /* clip_cluster.cpp in Sources */,
+				9FC7DA7015E5E8EB00F73D40 /* feature_extractor.cpp in Sources */,
+				9FC7DA7515E5E8F400F73D40 /* hmm_smoother.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -312,7 +316,6 @@
 				INSTALL_PATH = /usr/local/bin;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/lib\"",
 				);
 				PRODUCT_NAME = "rehearsal-seg-cluster";
@@ -328,7 +331,6 @@
 				INSTALL_PATH = /usr/local/bin;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/lib\"",
 				);
 				PRODUCT_NAME = "rehearsal-seg-cluster";
@@ -340,19 +342,9 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DEBUGGING_SYMBOLS = full;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"/usr/local/include/**",
-					"/usr/include/**",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					./lib,
-					/usr/local/lib,
-					/usr/lib/,
-				);
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
 				SDKROOT = macosx10.6;
@@ -381,7 +373,7 @@
 				1DEB923308733DC60010E9CD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
+			defaultConfigurationName = Release;
 		};
 		1DEB923508733DC60010E9CD /* Build configuration list for PBXProject "rehearsal-seg-cluster" */ = {
 			isa = XCConfigurationList;
@@ -390,7 +382,7 @@
 				1DEB923708733DC60010E9CD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

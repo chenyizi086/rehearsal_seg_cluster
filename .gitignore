@@ -1,3 +1,8 @@
+*moved-aside/
+*.wav
+*.a
+*.la
+*.dylib
 *.swp
 test.cpp
 test.c

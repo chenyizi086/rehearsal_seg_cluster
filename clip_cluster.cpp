@@ -421,14 +421,4 @@ void Clip_cluster::write_to_cent_info(Audio_clip *clip) {
     centinfo_write.write(out.c_str(), out.size());
     centinfo_write.close();
 }
-    
-    
-    
-
-
-
-
-
-
-
 

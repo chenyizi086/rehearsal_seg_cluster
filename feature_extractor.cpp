@@ -4,6 +4,8 @@
 #include "constant.h"
 #include "feature_extractor.h"
 #include "fft3/FFT3.h"
+#include "math.h"
+//#include <cmath>
 #include "rsc_utils.h"
 
 #include "math.h"
@@ -24,11 +26,6 @@
 #endif
 using namespace std;
 
-//if 1, causes printing internally
-#define PRINT_BIN_ENERGY 1
-
-#define p1 0.0577622650466621
-#define p2 2.1011784386926213
 
 bool FE_DEBUG_FLAG = true;
 
@@ -626,4 +623,3 @@ int Feature_extractor::gen_chroma(Audio_reader &reader, int hcutoff,
         printf("\nGenerated Chroma.\n");
     return cv_index;
 }
-
